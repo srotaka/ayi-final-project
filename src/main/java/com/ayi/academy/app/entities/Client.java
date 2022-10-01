@@ -29,13 +29,11 @@ public class Client {
     @ApiModelProperty(notes = "Client's first name",position = 1)
     @Column(name = "first_name", nullable = false, length = 50)
     @NotBlank(message = "First Name is required")
-    @Pattern(regexp = "^[\\p{L} .'-]+$",message = "Only letters allowed" ) //^[a-zA-Z]*(?:\s[a-zA-z]*)
     private String firstName;
 
     @ApiModelProperty(notes = "Client's last name",position = 2)
     @Column(name = "last_name", nullable = false, length = 50)
     @NotBlank(message = "Last Name is required")
-    @Pattern(regexp = "^[\\p{L} .'-]+$",message="Only letters allowed" )
     private String lastName;
 
     @ApiModelProperty(notes = "Client's DNI",position = 3)
