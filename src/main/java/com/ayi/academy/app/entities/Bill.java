@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
@@ -39,4 +38,5 @@ public class Bill {
     @Column(name = "is_active")
     @ApiModelProperty(notes = "Bill detail logic delete flag",position = 3)
     private boolean isActive = Boolean.FALSE;
+
 }

@@ -72,7 +72,6 @@ public class Address {
     @ApiModelProperty(notes = "Address postal code",position = 8)
     private Integer postalCode;
 
-
     @Column(name = "is_active")
     @ApiModelProperty(notes = "Address logic delete flag",position = 9)
     private boolean isActive = Boolean.FALSE;
