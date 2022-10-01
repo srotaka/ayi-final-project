@@ -24,19 +24,19 @@ public class Bill {
     @ApiModelProperty(notes = "The unique id of a bill detail")
     private Integer id;
 
-    @ApiModelProperty(notes = "Description of the purchase",position = 1)
     @Column(name = "description", nullable = false, length = 200)
     @NotBlank(message = "Description of the purchase is required")
+    @ApiModelProperty(notes = "Description of the purchase",position = 1)
     private String description;
 
-    @ApiModelProperty(notes = "Total amount of the purchase",position = 2)
     @Column(name = "total_amount", nullable = false, length = 8)
     @NotBlank(message = "Total amount of the purchase is required")
     @DecimalMin(value = "0.1", message = "Amount must be greater than 0.1")
+    @ApiModelProperty(notes = "Total amount of the purchase",position = 2)
     private Double totalAmount;
 
-    @ApiModelProperty(notes = "Bill detail logic delete flag",position = 3)
     @Column(name = "is_active")
+    @ApiModelProperty(notes = "Bill detail logic delete flag",position = 3)
     private boolean isActive = Boolean.FALSE;
 
 }

@@ -29,16 +29,16 @@ public class ClientDetails {
     @ApiModelProperty(notes = "The unique id of a client detail")
     private Integer id;
 
-    @ApiModelProperty(notes = "Client's purchases points",position = 1)
     @Column(nullable = false)
     @NotBlank(message = "Points are required")
     @Positive(message = "Points cannot be lower than 0")
+    @ApiModelProperty(notes = "Client's purchases points",position = 1)
     private Long points;
 
-    @ApiModelProperty(notes = "Client type",position = 2)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotBlank(message = "Client Type is required")
+    @ApiModelProperty(notes = "Client type",position = 2)
     private ClientType clientType;
 
     @ApiModelProperty(notes = "Client detail logic delete flag",position = 3)
