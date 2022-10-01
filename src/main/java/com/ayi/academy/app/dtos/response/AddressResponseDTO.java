@@ -1,6 +1,8 @@
 package com.ayi.academy.app.dtos.response;
 
+import com.ayi.academy.app.dtos.request.ClientRequestDTO;
 import com.ayi.academy.app.enums.Province;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -19,7 +21,7 @@ public class AddressResponseDTO implements Serializable {
     @NotNull
     @NotBlank(message = "ID is required")
     @ApiModelProperty(notes = "The unique id of an address")
-    private Integer id;
+    private Integer addressId;
 
     @NotNull
     @NotBlank(message = "Street number is required")
@@ -59,5 +61,11 @@ public class AddressResponseDTO implements Serializable {
     @Max(value = 99999,message = "Postal code cannot have more than 5 digits")
     @ApiModelProperty(notes = "Address postal code", required = true, position = 9)
     private Integer postalCode;
+
+    @NotNull
+    @NotBlank(message = "Client information is required")
+    @JsonIgnore
+    @ApiModelProperty(notes = "Client", required = true, position = 10)
+    private ClientResponseDTO client;
 
 }

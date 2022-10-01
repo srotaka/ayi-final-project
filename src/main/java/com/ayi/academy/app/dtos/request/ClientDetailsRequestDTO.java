@@ -31,4 +31,9 @@ public class ClientDetailsRequestDTO implements Serializable {
     @ApiModelProperty(notes = "Client type", required = true, position = 2)
     private ClientType clientType;
 
+    @NotNull
+    @NotBlank(message = "Client information is required")
+    @ApiModelProperty(notes = "Client", required = true, position = 3)
+    private ClientRequestDTO client;
+
 }
