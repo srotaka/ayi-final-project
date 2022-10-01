@@ -41,5 +41,8 @@ public class ClientDetails {
     @NotBlank(message = "Client Type is required")
     private ClientType clientType;
 
+    @ApiModelProperty(notes = "Client detail logic delete flag",position = 3)
+    @Column(name = "is_active")
+    private boolean isActive = Boolean.FALSE;
 
 }

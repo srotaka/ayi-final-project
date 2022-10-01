@@ -76,7 +76,6 @@ public class Address {
     @Column(name = "is_active")
     private boolean isActive = Boolean.FALSE;
 
-
    /*
     @ApiModelProperty(notes = "Client date of registration",position = 7)
     @CreatedDate
@@ -84,7 +83,7 @@ public class Address {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate creationDate;
 
-    @ApiModelProperty(notes = "Client date of modifcation)
+    @ApiModelProperty(notes = "Client date of modification)
     @LastModifiedDate
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate  modificationDate;
