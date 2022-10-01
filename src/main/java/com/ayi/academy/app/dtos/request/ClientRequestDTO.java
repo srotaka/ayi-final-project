@@ -35,7 +35,19 @@ public class ClientRequestDTO implements Serializable {
     @ApiModelProperty(notes = "Client's DNI", required = true, position = 4)
     private String documentType;
 
-    @ApiModelProperty(notes = "Client's email address", position = 5)
     @Email(regexp = "[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", message = "Email format must be valid")
+    @ApiModelProperty(notes = "Client's email address", position = 5)
     private String email;
+
+    @NotNull(message = "Client detail is required.")
+    @ApiModelProperty(notes = "Client type and points information", required = true, position = 6)
+    private ClientDetailsRequestDTO clientDetailsId;
+
+    @NotNull(message = "Client address list is required.")
+    @ApiModelProperty(notes = "Client address list information", required = true, position = 7)
+    private AddressRequestDTO addressRequest;
+
+    @NotNull(message = "Client bill list is required.")
+    @ApiModelProperty(notes = "Client bill list information", required = true, position = 8)
+    private BillRequestDTO billRequest;
 }

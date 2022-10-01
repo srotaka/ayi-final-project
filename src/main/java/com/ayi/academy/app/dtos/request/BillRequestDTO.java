@@ -27,4 +27,8 @@ public class BillRequestDTO implements Serializable {
     @ApiModelProperty(notes = "Total amount of the purchase",position = 2)
     private Double totalAmount;
 
+    @NotNull
+    @NotBlank(message = "Client information is required")
+    @ApiModelProperty(notes = "Client", required = true, position = 3)
+    private ClientRequestDTO client;
 }

@@ -60,4 +60,9 @@ public class AddressRequestDTO implements Serializable {
     @Max(value = 99999,message = "Postal code cannot have more than 5 digits")
     @ApiModelProperty(notes = "Address postal code", required = true, position = 8)
     private Integer postalCode;
+
+    @NotNull
+    @NotBlank(message = "Client information is required")
+    @ApiModelProperty(notes = "Client", required = true, position = 9)
+    private ClientRequestDTO client;
 }

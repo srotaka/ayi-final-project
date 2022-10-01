@@ -1,6 +1,7 @@
 package com.ayi.academy.app.dtos.response;
 
 import com.ayi.academy.app.enums.ClientType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -22,7 +23,7 @@ public class ClientDetailsResponseDTO implements Serializable {
     @NotNull
     @NotBlank(message = "ID is required")
     @ApiModelProperty(notes = "The unique id of a client",  required = true, position = 1)
-    private Integer id;
+    private Integer clientDetailId;
 
     @NotNull
     @NotBlank(message = "Points are required")
@@ -35,4 +36,10 @@ public class ClientDetailsResponseDTO implements Serializable {
     @Enumerated(EnumType.STRING)
     @ApiModelProperty(notes = "Client type", required = true, position = 3)
     private ClientType clientType;
+
+    @NotNull
+    @NotBlank(message = "Client information is required")
+    @JsonIgnore
+    @ApiModelProperty(notes = "Client", required = true, position = 4)
+    private ClientResponseDTO client;
 }

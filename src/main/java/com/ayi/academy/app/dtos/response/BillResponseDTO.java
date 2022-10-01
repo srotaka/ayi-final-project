@@ -1,5 +1,7 @@
 package com.ayi.academy.app.dtos.response;
 
+import com.ayi.academy.app.dtos.request.ClientRequestDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -20,7 +22,7 @@ public class BillResponseDTO implements Serializable {
     @NotNull
     @NotBlank(message = "ID is required")
     @ApiModelProperty(notes = "The unique id of a bill",  required = true, position = 1)
-    private Integer id;
+    private Integer billId;
 
     @NotNull
     @NotBlank(message = "Description of the purchase is required")
@@ -32,4 +34,10 @@ public class BillResponseDTO implements Serializable {
     @DecimalMin(value = "0.1", message = "Amount must be greater than 0.1")
     @ApiModelProperty(notes = "Total amount of the purchase",position = 3)
     private Double totalAmount;
+
+    @NotNull
+    @NotBlank(message = "Client information is required")
+    @JsonIgnore
+    @ApiModelProperty(notes = "Client", required = true, position = 4)
+    private ClientResponseDTO client;
 }
