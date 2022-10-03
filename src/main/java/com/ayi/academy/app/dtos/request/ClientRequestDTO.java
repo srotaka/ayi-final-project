@@ -15,39 +15,33 @@ import java.io.Serializable;
 public class ClientRequestDTO implements Serializable {
 
     @NotNull
-    @NotBlank(message = "First Name is required")
-    @ApiModelProperty(notes = "Client's first name",  required = true, position = 1)
+    @ApiModelProperty(notes = "Client's first name is required", example = "Tomás", required = true, position = 1)
     private String firstName;
 
     @NotNull
-    @NotBlank(message = "Last Name is required")
-    @ApiModelProperty(notes = "Client's last name", required = true, position = 2)
+    @ApiModelProperty(notes = "Client's last name is required", example = "Black", required = true, position = 2)
     private String lastName;
 
-    @NotBlank(message = "DNI is required")
+    @NotNull
     @Positive(message = "DNI cannot be a negative number")
     @Min(value = 10000000,message = "DNI must have at least 8 digits")
-    @ApiModelProperty(notes = "Client's DNI", required = true, position = 3)
+    @ApiModelProperty(notes = "Client's DNI is required", example = "45632951", required = true, position = 3)
     private Long dni;
 
     @NotNull
-    @NotBlank(message = "DNI Type is required")
-    @ApiModelProperty(notes = "Client's DNI", required = true, position = 4)
+    @ApiModelProperty(notes = "Client's DNI type is required", example = "DNI", required = true, position = 4)
     private String documentType;
 
     @Email(regexp = "[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", message = "Email format must be valid")
-    @ApiModelProperty(notes = "Client's email address", position = 5)
+    @ApiModelProperty(notes = "Client's email address", example = "tomas@mail.com",  position = 5)
     private String email;
 
-    @NotNull(message = "Client detail is required.")
     @ApiModelProperty(notes = "Client type and points information", required = true, position = 6)
     private ClientDetailsRequestDTO clientDetailsId;
 
-    @NotNull(message = "Client address list is required.")
     @ApiModelProperty(notes = "Client address list information", required = true, position = 7)
     private AddressRequestDTO addressRequest;
 
-    @NotNull(message = "Client bill list is required.")
     @ApiModelProperty(notes = "Client bill list information", required = true, position = 8)
     private BillRequestDTO billRequest;
 }

@@ -11,8 +11,8 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "AddressRequestDTO",description = "Information needed to register an Address with Client")
-public class AddressRequestDTO implements Serializable {
+@ApiModel(value = "AddressRequestWithoutClientDTO",description = "Information needed to register an Address without Client")
+public class AddressRequestWithoutClientDTO implements Serializable {
 
     @NotNull
     @ApiModelProperty(notes = "Street name is required", example = "San Martín", required = true, position = 1)
@@ -47,11 +47,7 @@ public class AddressRequestDTO implements Serializable {
     @NotNull
     @Min(value = 1000,message = "Postal code must have at least 4 digits")
     @Max(value = 99999,message = "Postal code cannot have more than 5 digits")
-    @ApiModelProperty(notes = "Address postal code", example = "2000", required = true, position = 8)
+    @ApiModelProperty(notes = "Address postal code is required", example = "2000", required = true, position = 8)
     private Integer postalCode;
-
-    @NotNull
-    @ApiModelProperty(notes = "Client is required", required = true, position = 9)
-    private ClientRequestDTO clientId;
 
 }

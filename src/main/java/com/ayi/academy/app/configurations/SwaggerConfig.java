@@ -33,8 +33,8 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     private ApiInfo apiDetails(){
         return new ApiInfo(
-                "Ayi Academy Final Project",
-                "API Rest project",
+                "Final Project by Silvia Otaka",
+                "Java Spring Boot Final Project for Ayi Academy",
                 "1.0",
                 "Terms of use",
                 new springfox.documentation.service.Contact("Silvia Otaka","www.linkedin.com/in/silvia-raquel-otaka/","srotaka@gmail.com"),
