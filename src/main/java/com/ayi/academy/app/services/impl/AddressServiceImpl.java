@@ -12,6 +12,7 @@ import com.ayi.academy.app.mappers.IClientMapper;
 import com.ayi.academy.app.repositories.AddressRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IAddressService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
+@Transactional
 public class AddressServiceImpl implements IAddressService {
 
     @Autowired
@@ -36,7 +39,6 @@ public class AddressServiceImpl implements IAddressService {
     private IClientMapper clientMapper;
 
     @Override
-    @Transactional
     public AddressResponseDTO createAddress (AddressRequestWithoutClientDTO addressRequest, Integer clientId){
         Address address = addressMapper.convertDtoToEntityWithoutClient(addressRequest);
         Client client = clientRepository.findById(clientId).get();
@@ -47,7 +49,6 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    @Transactional
     public List<AddressResponseDTO> getAllAddressWithoutClient() throws ReadAccessException {
 
         List<AddressResponseDTO> responseDTOList = null;
@@ -75,7 +76,6 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    @Transactional
     public List<AddressResponseDTO> getAllAddressByClientId(Integer clientId)throws ReadAccessException{
         List<AddressResponseDTO> responseDTOList = null;
         List<Address> addressList = addressRepository.getAllAddressByIdClient(clientId);
@@ -144,6 +144,29 @@ public class AddressServiceImpl implements IAddressService {
             throw new ReadAccessException("Error paginating address information");
         }
     }
+    @Override
+    public AddressResponseDTO updateAddress(Integer id, AddressRequestDTO requestDTO) {
+        Optional<Address> entityOptional = addressRepository.findById(id);
+        Address entity = entityOptional.get();
+
+        if(entityOptional.isPresent()) {
+            entity.setStreet(requestDTO.getStreet());
+            entity.setNumber(requestDTO.getNumber());
+            entity.setFloor(requestDTO.getFloor());
+            entity.setApartmentUnit(requestDTO.getApartmentUnit());
+            entity.setCity(requestDTO.getCity());
+            entity.setProvince(requestDTO.getProvince());
+            entity.setCountry(requestDTO.getCountry());
+            entity.setPostalCode(requestDTO.getPostalCode());
+            entity.setClientId(clientMapper.dtoToEntity(requestDTO.getClientId()));
+
+            addressRepository.save(entity);
+
+            return addressMapper.entityToDto(entity);
+        } else {
+            throw new RuntimeException("No se encuentra el ID a actualizar");
+        }
+    }
 
     /*@Override
     public ResponseEntity<?> updateAddress(Integer id, Map<Object, Object> fields) throws ReadAccessException {
@@ -174,28 +197,6 @@ public class AddressServiceImpl implements IAddressService {
 
      */
 
-    @Override
-    public AddressResponseDTO updateAddress(Integer id, AddressRequestDTO requestDTO) {
-        Optional<Address> entityOptional = addressRepository.findById(id);
-        Address entity = entityOptional.get();
 
-        if(entityOptional.isPresent()) {
-            entity.setStreet(requestDTO.getStreet());
-            entity.setNumber(requestDTO.getNumber());
-            entity.setFloor(requestDTO.getFloor());
-            entity.setApartmentUnit(requestDTO.getApartmentUnit());
-            entity.setCity(requestDTO.getCity());
-            entity.setProvince(requestDTO.getProvince());
-            entity.setCountry(requestDTO.getCountry());
-            entity.setPostalCode(requestDTO.getPostalCode());
-            entity.setClientId(clientMapper.dtoToEntity(requestDTO.getClientId()));
-
-            addressRepository.save(entity);
-
-            return addressMapper.entityToDto(entity);
-        } else {
-            throw new RuntimeException("No se encuentra el ID a actualizar");
-        }
-    }
 
 }
