@@ -20,23 +20,19 @@ import java.io.Serializable;
 public class BillResponseDTO implements Serializable {
 
     @NotNull
-    @NotBlank(message = "ID is required")
     @ApiModelProperty(notes = "The unique id of a bill",  required = true, position = 1)
     private Integer billId;
 
     @NotNull
-    @NotBlank(message = "Description of the purchase is required")
-    @ApiModelProperty(notes = "Description of the purchase",position = 2)
+    @ApiModelProperty(notes = "Description of the purchase is required",position = 2)
     private String description;
 
     @NotNull
-    @NotBlank(message = "Total amount of the purchase is required")
     @DecimalMin(value = "0.1", message = "Amount must be greater than 0.1")
-    @ApiModelProperty(notes = "Total amount of the purchase",position = 3)
+    @ApiModelProperty(notes = "Total amount of the purchase is required",position = 3)
     private Double totalAmount;
 
-    @NotNull
-    @NotBlank(message = "Client information is required")
+
     @JsonIgnore
     @ApiModelProperty(notes = "Client", required = true, position = 4)
     private ClientResponseDTO client;

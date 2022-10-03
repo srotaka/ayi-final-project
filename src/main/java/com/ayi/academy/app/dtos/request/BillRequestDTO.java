@@ -17,18 +17,14 @@ import java.io.Serializable;
 public class BillRequestDTO implements Serializable {
 
     @NotNull
-    @NotBlank(message = "Description of the purchase is required")
-    @ApiModelProperty(notes = "Description of the purchase",position = 1)
+    @ApiModelProperty(notes = "Description of the purchase is required",position = 1)
     private String description;
 
     @NotNull
-    @NotBlank(message = "Total amount of the purchase is required")
     @DecimalMin(value = "0.1", message = "Amount must be greater than 0.1")
-    @ApiModelProperty(notes = "Total amount of the purchase",position = 2)
+    @ApiModelProperty(notes = "Total amount of the purchase is required",position = 2)
     private Double totalAmount;
 
-    @NotNull
-    @NotBlank(message = "Client information is required")
     @ApiModelProperty(notes = "Client", required = true, position = 3)
     private ClientRequestDTO client;
 }
