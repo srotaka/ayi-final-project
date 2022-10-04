@@ -1,8 +1,9 @@
 package com.ayi.academy.app.services;
 
-import com.ayi.academy.app.dtos.request.ClientRequestDTO;
-import com.ayi.academy.app.dtos.response.ClientResponseDTO;
+import com.ayi.academy.app.dtos.request.ClientWithAddressRequestDTO;
+import com.ayi.academy.app.dtos.response.ClientWithAddressResponseDTO;
 
 public interface IClientService {
-    ClientResponseDTO createClient(ClientRequestDTO requestDTO);
+
+    ClientWithAddressRequestDTO createClientWithAddress(ClientWithAddressRequestDTO requestDTO);
 }

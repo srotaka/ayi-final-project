@@ -44,9 +44,9 @@ public class Client {
     private ClientDetails clientDetailsId;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addressList = new ArrayList<>();;
+    private List<Address> addressList = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Bill> billList = new ArrayList<>();;
+    private List<Bill> billList = new ArrayList<>();
 
 }
