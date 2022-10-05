@@ -1,13 +1,10 @@
 package com.ayi.academy.app.dtos.response;
 
-import com.ayi.academy.app.dtos.request.ClientRequestDTO;
 import com.ayi.academy.app.entities.Client;
-import com.ayi.academy.app.enums.Province;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 

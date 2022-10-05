@@ -1,7 +1,5 @@
 package com.ayi.academy.app.dtos.response;
 
-import com.ayi.academy.app.dtos.request.AddressRequestDTO;
-import com.ayi.academy.app.dtos.request.BillRequestDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -44,15 +42,12 @@ public class ClientResponseDTO implements Serializable {
     @ApiModelProperty(notes = "Client's email address is required", position = 6)
     private String email;
 
-
     @ApiModelProperty(notes = "Client type and points information", required = true, position = 7)
     private ClientDetailsResponseDTO clientDetailsId;
-
 
     @ApiModelProperty(notes = "Client address list information", required = true, position = 8)
     private List<AddressResponseDTO> addressList;
 
-
     @ApiModelProperty(notes = "Client bill list information", required = true, position = 9)
-    private List<BillResponseDTO> billList;
+    private List<InvoiceResponseDTO> billList;
 }

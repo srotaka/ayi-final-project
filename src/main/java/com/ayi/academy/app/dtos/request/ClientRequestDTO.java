@@ -43,5 +43,5 @@ public class ClientRequestDTO implements Serializable {
     private AddressRequestDTO addressRequest;
 
     @ApiModelProperty(notes = "Client bill list information", required = true, position = 8)
-    private BillRequestDTO billRequest;
+    private InvoiceRequestDTO billRequest;
 }

@@ -1,6 +1,5 @@
 package com.ayi.academy.app.services.impl;
 
-import com.ayi.academy.app.dtos.request.AddressRequestDTO;
 import com.ayi.academy.app.dtos.request.AddressRequestWithoutClientDTO;
 import com.ayi.academy.app.dtos.response.AddressResponseDTO;
 import com.ayi.academy.app.dtos.response.AddressResponsePages;
@@ -12,17 +11,23 @@ import com.ayi.academy.app.mappers.IClientMapper;
 import com.ayi.academy.app.repositories.AddressRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IAddressService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 import java.util.stream.Collectors;
+import java.lang.reflect.Field;
 
+@Slf4j
 @Service
+@Transactional
 public class AddressServiceImpl implements IAddressService {
 
     @Autowired
@@ -36,7 +41,6 @@ public class AddressServiceImpl implements IAddressService {
     private IClientMapper clientMapper;
 
     @Override
-    @Transactional
     public AddressResponseDTO createAddress (AddressRequestWithoutClientDTO addressRequest, Integer clientId){
         Address address = addressMapper.convertDtoToEntityWithoutClient(addressRequest);
         Client client = clientRepository.findById(clientId).get();
@@ -47,7 +51,6 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    @Transactional
     public List<AddressResponseDTO> getAllAddressWithoutClient() throws ReadAccessException {
 
         List<AddressResponseDTO> responseDTOList = null;
@@ -75,7 +78,6 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    @Transactional
     public List<AddressResponseDTO> getAllAddressByClientId(Integer clientId)throws ReadAccessException{
         List<AddressResponseDTO> responseDTOList = null;
         List<Address> addressList = addressRepository.getAllAddressByIdClient(clientId);
@@ -145,57 +147,31 @@ public class AddressServiceImpl implements IAddressService {
         }
     }
 
-    /*@Override
-    public ResponseEntity<?> updateAddress(Integer id, Map<Object, Object> fields) throws ReadAccessException {
-
+    @Override
+    public AddressResponseDTO  updateAddress(Integer id, Map<String, Object> fields) throws ReadAccessException {
         if(id == null || id < 0){
             throw new ReadAccessException("ID is required");
         }
         AddressResponseDTO addressResponseDTO;
-        Optional<Address> address = addressRepository.findById(id);
+        Optional<Address> addressOptional = addressRepository.findById(id);
 
-        if (!address.isPresent()) {
-            throw new ReadAccessException("Error. ID not found.");
+        if (!addressOptional.isPresent()) {
+            throw new ReadAccessException("No address found with that id");
         }
+
         try {
             fields.forEach((key, value) -> {
                 Field field = ReflectionUtils.findField(Address.class, (String) key);
                 field.setAccessible(true);
-                ReflectionUtils.setField(field, address.get(), value);
+                ReflectionUtils.setField(field, addressOptional.get(), value);
             });
-
-            Address updatedAddress = addressRepository.save(address.get());
-
-            return new ResponseEntity<Address>(updatedAddress, HttpStatus.OK);
+            Address updatedAddress = addressRepository.save(addressOptional.get());
+            return addressMapper.entityToDto(updatedAddress);
         }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-     */
-
-    @Override
-    public AddressResponseDTO updateAddress(Integer id, AddressRequestDTO requestDTO) {
-        Optional<Address> entityOptional = addressRepository.findById(id);
-        Address entity = entityOptional.get();
-
-        if(entityOptional.isPresent()) {
-            entity.setStreet(requestDTO.getStreet());
-            entity.setNumber(requestDTO.getNumber());
-            entity.setFloor(requestDTO.getFloor());
-            entity.setApartmentUnit(requestDTO.getApartmentUnit());
-            entity.setCity(requestDTO.getCity());
-            entity.setProvince(requestDTO.getProvince());
-            entity.setCountry(requestDTO.getCountry());
-            entity.setPostalCode(requestDTO.getPostalCode());
-            entity.setClientId(clientMapper.dtoToEntity(requestDTO.getClientId()));
-
-            addressRepository.save(entity);
-
-            return addressMapper.entityToDto(entity);
-        } else {
-            throw new RuntimeException("No se encuentra el ID a actualizar");
+            throw new ReadAccessException("ID is required");
         }
     }
 
 }
+
+
