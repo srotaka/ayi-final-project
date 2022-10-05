@@ -27,7 +27,7 @@ public interface IAddressService {
 
     AddressResponsePages getPagedAddresses(Integer page, Integer size) throws ReadAccessException;
 
-   /* ResponseEntity<?> updateAddress(Integer id, Map<Object, Object> fields) throws ReadAccessException;*/
+    ResponseEntity<?> updateAddress(Integer id, Map<String, Object> fields) throws ReadAccessException;
 
-    AddressResponseDTO updateAddress(Integer id, AddressRequestDTO requestDTO);
+    /*AddressResponseDTO updateAddress(Integer id, AddressRequestDTO requestDTO);*/
 }

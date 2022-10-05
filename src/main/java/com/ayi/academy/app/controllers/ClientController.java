@@ -1,8 +1,10 @@
 package com.ayi.academy.app.controllers;
 
 import com.ayi.academy.app.dtos.request.AddressRequestWithoutClientDTO;
+import com.ayi.academy.app.dtos.request.ClientRequestDTO;
 import com.ayi.academy.app.dtos.request.ClientWithAddressRequestDTO;
 import com.ayi.academy.app.dtos.response.AddressResponseDTO;
+import com.ayi.academy.app.dtos.response.ClientResponseDTO;
 import com.ayi.academy.app.dtos.response.ClientWithAddressResponseDTO;
 import com.ayi.academy.app.services.IClientService;
 import io.swagger.annotations.Api;
@@ -25,7 +27,7 @@ public class ClientController {
     @Autowired
     private IClientService clientService;
 
-    @PostMapping(value = "/createClient ")
+    /*@PostMapping(value = "/createClient ")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value ="Save a new client with new address", httpMethod = "POST",response = ClientWithAddressRequestDTO.class)
     @ApiResponses(value = {
@@ -38,6 +40,19 @@ public class ClientController {
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
 
+    }*/
+
+    @PostMapping(value = "/createClient ")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value ="Save a new client with new address", httpMethod = "POST",response = ClientResponseDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created. Client was successfully created",response = ClientResponseDTO.class),
+            @ApiResponse(code = 400, message = "Bad request/Invalid field")
+    })
+    public ResponseEntity<?> createClient (@RequestBody ClientRequestDTO  request) {
+
+        ClientResponseDTO responseDTO = clientService.createClient(request);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
 }

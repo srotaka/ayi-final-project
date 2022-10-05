@@ -1,6 +1,5 @@
 package com.ayi.academy.app.services.impl;
 
-import com.ayi.academy.app.dtos.request.AddressRequestDTO;
 import com.ayi.academy.app.dtos.request.AddressRequestWithoutClientDTO;
 import com.ayi.academy.app.dtos.response.AddressResponseDTO;
 import com.ayi.academy.app.dtos.response.AddressResponsePages;
@@ -17,10 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.lang.reflect.Field;
 
 @Slf4j
 @Service
@@ -143,10 +146,17 @@ public class AddressServiceImpl implements IAddressService {
             throw new ReadAccessException("Error paginating address information");
         }
     }
-    @Override
-    public AddressResponseDTO updateAddress(Integer id, AddressRequestDTO requestDTO) {
+   /* @Override
+    public ResponseEntity<?> updateAddress(Integer id, Map<Object, Object> fields) {
         Optional<Address> entityOptional = addressRepository.findById(id);
+        if(entityOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+
         Address entity = entityOptional.get();
+
+
 
         if(entityOptional.isPresent()) {
             entity.setStreet(requestDTO.getStreet());
@@ -165,38 +175,32 @@ public class AddressServiceImpl implements IAddressService {
         } else {
             throw new RuntimeException("No se encuentra el ID a actualizar");
         }
-    }
+    }*/
 
-    /*@Override
-    public ResponseEntity<?> updateAddress(Integer id, Map<Object, Object> fields) throws ReadAccessException {
-
+    @Override
+    public ResponseEntity<?> updateAddress(Integer id, Map<String, Object> fields) throws ReadAccessException {
         if(id == null || id < 0){
             throw new ReadAccessException("ID is required");
         }
         AddressResponseDTO addressResponseDTO;
-        Optional<Address> address = addressRepository.findById(id);
+        Optional<Address> addressOptional = addressRepository.findById(id);
 
-        if (!address.isPresent()) {
-            throw new ReadAccessException("Error. ID not found.");
+        if (!addressOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
+
         try {
             fields.forEach((key, value) -> {
                 Field field = ReflectionUtils.findField(Address.class, (String) key);
                 field.setAccessible(true);
-                ReflectionUtils.setField(field, address.get(), value);
+                ReflectionUtils.setField(field, addressOptional.get(), value);
             });
-
-            Address updatedAddress = addressRepository.save(address.get());
-
+            Address updatedAddress = addressRepository.save(addressOptional.get());
             return new ResponseEntity<Address>(updatedAddress, HttpStatus.OK);
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
-
-     */
-
-
 
 }
 

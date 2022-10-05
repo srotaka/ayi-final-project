@@ -68,7 +68,7 @@ public class AddressController {
             @ApiResponse(code = 404, message = "No address found."),
             @ApiResponse(code = 400 , message = "Bad request/Invalid field")})
     public  ResponseEntity<?>getAddressById(
-            @ApiParam(name = "id", required = true, value = "Address Id", example = "5")
+            @ApiParam(name = "id", required = true, value = "Address Id", example = "1")
             @RequestParam Integer id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -117,7 +117,7 @@ public class AddressController {
             @ApiResponse(code = 404, message = "Address not found"),
             @ApiResponse(code = 400 , message = "Bad request/Invalid field")})
     public ResponseEntity<?> deleteAddress(
-            @ApiParam(name = "id", required = true, value = "Address ID", example = "5")
+            @ApiParam(name = "id", required = true, value = "Address ID", example = "1")
             @PathVariable Integer id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -158,30 +158,12 @@ public class AddressController {
         return new ResponseEntity<>(addressPages, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/updateAddress/{id}")
-    @ApiOperation(value = "Updates address information",httpMethod = "PUT",response = AddressResponseDTO.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Success. Address updated."),
-            @ApiResponse(code = 400,message = "Bad request/Invalid field")})
-    public ResponseEntity<?> updateAddress(@ApiParam(value = "Address ID", required = true, example = "1")@PathVariable(name = "id") Integer id,
-            @RequestBody AddressRequestDTO addressRequestDTO) {
-
-        AddressResponseDTO addressResponseDTO = addressService.updateAddress(id, addressRequestDTO);
-        Map<String, Object> response = new HashMap<>();
-
-        if(addressResponseDTO == null) {
-            response.put("Message", "No se encontró el ID a modificar");
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);         }
-
-        return new ResponseEntity<>(addressResponseDTO, HttpStatus.CREATED);
-    }
-
-   /* @PatchMapping("/updateAddress/{id}")
+    @PatchMapping("/updateAddress/{id}")
     @ApiOperation(value = "Updates address information",httpMethod = "PATCH",response = AddressResponseDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200,message = "Success. Address updated."),
             @ApiResponse(code = 400,message = "Bad request/Invalid field")})
-    public ResponseEntity<?> updateAddress(@PathVariable Integer id, @RequestBody Map<Object, Object> fields){
+    public ResponseEntity<?> updateAddress(@PathVariable Integer id, @RequestBody Map<String, Object> fields){
 
         ResponseEntity<?> addressResponseDTO;
         Map<String, Object> response = new HashMap<>();
@@ -197,7 +179,7 @@ public class AddressController {
 
         return new ResponseEntity<>(addressResponseDTO, HttpStatus.OK);
     }
-    */
+
 
 
 }
