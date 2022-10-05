@@ -146,39 +146,9 @@ public class AddressServiceImpl implements IAddressService {
             throw new ReadAccessException("Error paginating address information");
         }
     }
-   /* @Override
-    public ResponseEntity<?> updateAddress(Integer id, Map<Object, Object> fields) {
-        Optional<Address> entityOptional = addressRepository.findById(id);
-        if(entityOptional.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-
-        Address entity = entityOptional.get();
-
-
-
-        if(entityOptional.isPresent()) {
-            entity.setStreet(requestDTO.getStreet());
-            entity.setNumber(requestDTO.getNumber());
-            entity.setFloor(requestDTO.getFloor());
-            entity.setApartmentUnit(requestDTO.getApartmentUnit());
-            entity.setCity(requestDTO.getCity());
-            entity.setProvince(requestDTO.getProvince());
-            entity.setCountry(requestDTO.getCountry());
-            entity.setPostalCode(requestDTO.getPostalCode());
-            entity.setClientId(clientMapper.dtoToEntity(requestDTO.getClientId()));
-
-            addressRepository.save(entity);
-
-            return addressMapper.entityToDto(entity);
-        } else {
-            throw new RuntimeException("No se encuentra el ID a actualizar");
-        }
-    }*/
 
     @Override
-    public ResponseEntity<?> updateAddress(Integer id, Map<String, Object> fields) throws ReadAccessException {
+    public AddressResponseDTO  updateAddress(Integer id, Map<String, Object> fields) throws ReadAccessException {
         if(id == null || id < 0){
             throw new ReadAccessException("ID is required");
         }
@@ -186,7 +156,7 @@ public class AddressServiceImpl implements IAddressService {
         Optional<Address> addressOptional = addressRepository.findById(id);
 
         if (!addressOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
+            throw new ReadAccessException("No address found with that id");
         }
 
         try {
@@ -196,9 +166,9 @@ public class AddressServiceImpl implements IAddressService {
                 ReflectionUtils.setField(field, addressOptional.get(), value);
             });
             Address updatedAddress = addressRepository.save(addressOptional.get());
-            return new ResponseEntity<Address>(updatedAddress, HttpStatus.OK);
+            return addressMapper.entityToDto(updatedAddress);
         }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            throw new ReadAccessException("ID is required");
         }
     }
 

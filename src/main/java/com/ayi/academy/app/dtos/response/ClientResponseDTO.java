@@ -1,7 +1,5 @@
 package com.ayi.academy.app.dtos.response;
 
-import com.ayi.academy.app.dtos.request.AddressRequestDTO;
-import com.ayi.academy.app.dtos.request.BillRequestDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -51,5 +49,5 @@ public class ClientResponseDTO implements Serializable {
     private List<AddressResponseDTO> addressList;
 
     @ApiModelProperty(notes = "Client bill list information", required = true, position = 9)
-    private List<BillResponseDTO> billList;
+    private List<InvoiceResponseDTO> billList;
 }

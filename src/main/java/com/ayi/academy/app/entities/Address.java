@@ -25,13 +25,9 @@ public class Address {
     private String street;
 
     @Column(name = "number", nullable = false, length = 6)
-    @Max(value = 999999,message = "Street number cannot have more than 6 digits")
-    @Positive(message = "Street number cannot be a negative number")
     private Integer number;
 
     @Column(name = "floor", length = 6)
-    @Max(value = 999999,message = "Address floor cannot have more than 6 digits")
-    @Positive(message = "Floor number cannot be a negative number")
     private Integer floor;
 
     @Column(name = "apartment_unit", length = 6)

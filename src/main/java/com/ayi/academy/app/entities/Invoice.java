@@ -2,31 +2,27 @@ package com.ayi.academy.app.entities;
 
 import lombok.*;
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-
 @Entity
-@Table(name="bills")
+@Table(name="invoices")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bill {
+public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bill_id")
-    private Integer billId;
+    @Column(name = "invoice_id")
+    private Integer invoiceId;
 
     @Column(name = "description", nullable = false, length = 200)
     private String description;
 
     @Column(name = "total_amount", nullable = false, length = 8)
-    @DecimalMin(value = "0.1", message = "Amount must be greater than 0.1")
     private Double totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "client_id")
-    private Client clientId;
+    @JoinColumn(name = "client", referencedColumnName = "client_id")
+    private Client client;
 }

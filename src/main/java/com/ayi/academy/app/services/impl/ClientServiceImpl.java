@@ -36,13 +36,13 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public ClientResponseDTO createClient(ClientRequestDTO requestDTO) {
         Client client = clientMapper.dtoToEntity(requestDTO);
-        List<Address> addressList = client.getAddressList();
+       /* List<Address> addressList = client.getAddressList();
         ClientDetails detailsList = detailsRepository.save(client.getClientDetailsId());
 
         for (Address address : client.getAddressList()) {
             address = addressRepository.save(address);
         }
-
+*/
         client = clientRepository.save(client);
 
         return clientMapper.entityToDto(client);
