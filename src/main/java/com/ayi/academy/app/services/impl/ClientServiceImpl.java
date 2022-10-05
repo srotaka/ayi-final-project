@@ -32,6 +32,22 @@ public class ClientServiceImpl implements IClientService {
     @Autowired
     private ClientDetailsRepository detailsRepository;
     MessageUtil logger;
+
+    @Override
+    public ClientResponseDTO createClient(ClientRequestDTO requestDTO) {
+        Client client = clientMapper.dtoToEntity(requestDTO);
+        List<Address> addressList = client.getAddressList();
+        ClientDetails detailsList = detailsRepository.save(client.getClientDetailsId());
+
+        for (Address address : client.getAddressList()) {
+            address = addressRepository.save(address);
+        }
+
+        client = clientRepository.save(client);
+
+        return clientMapper.entityToDto(client);
+    }
+
     /* @Override
     public ClientWithAddressRequestDTO createClientWithAddress(ClientWithAddressRequestDTO requestDTO) {
 
@@ -73,18 +89,5 @@ public class ClientServiceImpl implements IClientService {
          responseDTO.setEmail(requestDTO.getEmail());
          return requestDTO;
      }*/
-    @Override
-    public ClientResponseDTO createClient(ClientRequestDTO requestDTO) {
-        Client client = clientMapper.dtoToEntity(requestDTO);
-        List<Address> addressList = client.getAddressList();
-        ClientDetails detailsList = detailsRepository.save(client.getClientDetailsId());
 
-        for (Address address : client.getAddressList()) {
-            address = addressRepository.save(address);
-        }
-        
-        client = clientRepository.save(client);
-
-        return clientMapper.entityToDto(client);
-    }
 }

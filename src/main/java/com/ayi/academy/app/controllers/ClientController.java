@@ -26,6 +26,19 @@ public class ClientController {
 
     @Autowired
     private IClientService clientService;
+    @PostMapping(value = "/createClient ")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value ="Save a new client with new address", httpMethod = "POST",response = ClientResponseDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created. Client was successfully created",response = ClientResponseDTO.class),
+            @ApiResponse(code = 400, message = "Bad request/Invalid field")
+    })
+    public ResponseEntity<ClientResponseDTO> createClient (@RequestBody ClientRequestDTO  request) {
+
+        ClientResponseDTO responseDTO = clientService.createClient(request);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
 
     /*@PostMapping(value = "/createClient ")
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,17 +55,5 @@ public class ClientController {
 
     }*/
 
-    @PostMapping(value = "/createClient ")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value ="Save a new client with new address", httpMethod = "POST",response = ClientResponseDTO.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Created. Client was successfully created",response = ClientResponseDTO.class),
-            @ApiResponse(code = 400, message = "Bad request/Invalid field")
-    })
-    public ResponseEntity<?> createClient (@RequestBody ClientRequestDTO  request) {
-
-        ClientResponseDTO responseDTO = clientService.createClient(request);
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-    }
 
 }

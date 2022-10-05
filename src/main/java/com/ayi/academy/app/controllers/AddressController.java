@@ -1,6 +1,5 @@
 package com.ayi.academy.app.controllers;
 
-import com.ayi.academy.app.dtos.request.AddressRequestDTO;
 import com.ayi.academy.app.dtos.request.AddressRequestWithoutClientDTO;
 import com.ayi.academy.app.dtos.response.AddressResponseDTO;
 import com.ayi.academy.app.dtos.response.AddressResponsePages;
@@ -161,7 +160,7 @@ public class AddressController {
     @PatchMapping("/updateAddress/{id}")
     @ApiOperation(value = "Updates address information",httpMethod = "PATCH",response = AddressResponseDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200,message = "Success. Address updated."),
+            @ApiResponse(code = 200,message = "Success. Address updated.", response = AddressResponseDTO.class),
             @ApiResponse(code = 400,message = "Bad request/Invalid field")})
     public ResponseEntity<?> updateAddress(@PathVariable Integer id, @RequestBody Map<String, Object> fields){
 
@@ -170,6 +169,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.updateAddress(id, fields);
+            //response.put("Address updated", addressResponseDTO);
 
         } catch (ReadAccessException e) {
             response.put("Error Code", 404);
@@ -177,7 +177,7 @@ public class AddressController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(addressResponseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(addressResponseDTO);
     }
 
 
