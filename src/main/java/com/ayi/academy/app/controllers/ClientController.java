@@ -2,7 +2,9 @@ package com.ayi.academy.app.controllers;
 
 import com.ayi.academy.app.dtos.request.ClientRequestDTO;
 import com.ayi.academy.app.dtos.response.AddressResponseDTO;
+import com.ayi.academy.app.dtos.response.AddressResponsePages;
 import com.ayi.academy.app.dtos.response.ClientResponseDTO;
+import com.ayi.academy.app.dtos.response.ClientResponsePages;
 import com.ayi.academy.app.exceptions.ReadAccessException;
 import com.ayi.academy.app.services.IClientService;
 import io.swagger.annotations.*;
@@ -70,6 +72,55 @@ public class ClientController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ApiOperation(value = "Delete an client by id", httpMethod = "DELETE")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success. Client deleted by id"),
+            @ApiResponse(code = 404, message = "Client not found"),
+            @ApiResponse(code = 400, message = "Bad request/Invalid field")})
+    public ResponseEntity<?> deleteAddress(
+            @ApiParam(name = "id", required = true, value = "Client ID", example = "1")
+            @PathVariable Integer id) throws ReadAccessException {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("Code", 200);
+            response.put("Message", "Client deleted successfully");
+            clientService.deleteClient(id);
+        } catch (ReadAccessException e) {
+            response.put("Error Code", 404);
+            response.put("Message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+        List<ClientResponseDTO> responseDTOList = clientService.getAllClients();;
+
+        return ResponseEntity.ok(responseDTOList);
+    }
+
+    @GetMapping(value = "/pagedClientList/{page}/{size}")
+    @ApiOperation(value = "Retrieves paged client list", httpMethod = "GET", response = ClientResponseDTO[].class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success. Paged address list retrieved.", response = ClientResponseDTO[].class),
+            @ApiResponse(code = 400, message = "Bad request/Invalid field")})
+    public ResponseEntity<?> getAllPersonsForPage(
+            @ApiParam(value = "Page to display", required = true, example = "1")
+            @PathVariable(name = "page") Integer page,
+            @ApiParam(value = "Number of items per request", required = true, example = "2")
+            @PathVariable(name = "size") Integer size) {
+
+        ClientResponsePages clientPages;
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            clientPages = clientService.getPagedClients(page, size);
+        } catch (ReadAccessException e) {
+            response.put("Error Code", 404);
+            response.put("Message", "No client in data base");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(clientPages, HttpStatus.OK);
     }
 
 

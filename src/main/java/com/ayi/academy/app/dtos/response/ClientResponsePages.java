@@ -12,19 +12,19 @@ import java.util.List;
 @Setter
 @Builder
 @ApiModel(
-        value = "AddressResponsePages",
-        description = "Address list paginated")
-public class AddressResponsePages {
+        value = "ClientResponsePages",
+        description = "Client list paginated")
+public class ClientResponsePages {
 
-    @ApiModelProperty(position = 1, notes = "List of addresses")
-    private List<AddressResponseDTO> addressResponseList;
+    @ApiModelProperty(position = 1, notes = "List of clients")
+    private List<ClientResponseDTO> clientResponseList;
     @ApiModelProperty(position = 2, notes = "Total pages")
     private Integer totalPages;
     @ApiModelProperty(position = 3, notes = "Current pages")
     private Integer currentPage;
     @ApiModelProperty(position = 4, notes = "Items by page")
-    private Integer addressesPerPage;
+    private Integer clientsPerPage;
     @ApiModelProperty(position = 5, notes = "size")
-    private Integer totalAddresses;
+    private Integer totalClients;
 
 }

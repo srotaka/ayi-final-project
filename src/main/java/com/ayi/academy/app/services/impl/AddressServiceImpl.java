@@ -123,7 +123,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponsePages getPagedAddresses(Integer page, Integer size) throws ReadAccessException { // Paginación
+    public AddressResponsePages getPagedAddresses(Integer page, Integer size) throws ReadAccessException {
 
         AddressResponsePages addressResponsePages;
         Pageable pageable = PageRequest.of(page, size);
@@ -131,10 +131,10 @@ public class AddressServiceImpl implements IAddressService {
 
         if(addressPage != null && !addressPage.isEmpty()) {
             addressResponsePages = addressMapper.pagedAddressList(addressPage.getContent());
-            addressResponsePages.setItemsPerPage(addressPage.getSize());
+            addressResponsePages.setAddressesPerPage(addressPage.getSize());
             addressResponsePages.setCurrentPage(addressPage.getNumber() + 1);
             addressResponsePages.setTotalPages(addressPage.getTotalPages());
-            addressResponsePages.setTotalElements((int) addressPage.getTotalElements());
+            addressResponsePages.setTotalAddresses((int) addressPage.getTotalElements());
             return addressResponsePages;
         } else {
             throw new ReadAccessException("Error paginating address information");
