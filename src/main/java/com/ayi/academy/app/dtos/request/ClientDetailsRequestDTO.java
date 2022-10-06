@@ -14,12 +14,11 @@ import java.io.Serializable;
 @ApiModel(value = "ClientDetailsRequestDTO",description = "Information needed to create Client Detail information")
 public class ClientDetailsRequestDTO implements Serializable {
 
-    @NotNull(message = "Client purchases points are required")
-    @ApiModelProperty(notes = "Client's purchases points",position = 1)
+    @ApiModelProperty(notes = "Client's purchases points", example = "500", position = 1)
     private Long points;
 
     @NotNull(message = "VIP status are required")
-    @ApiModelProperty(notes = "Client status is required", position = 2)
+    @ApiModelProperty(notes = "Client status is required", example = "1", position = 2)
     private Boolean isVIP;
 
 

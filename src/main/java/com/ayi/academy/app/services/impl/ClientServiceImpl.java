@@ -1,22 +1,24 @@
 package com.ayi.academy.app.services.impl;
 
-import com.ayi.academy.app.dtos.request.ClientRequestDTO;
+import com.ayi.academy.app.dtos.response.AddressResponseDTO;
 import com.ayi.academy.app.dtos.response.ClientResponseDTO;
-import com.ayi.academy.app.entities.Address;
 import com.ayi.academy.app.entities.Client;
-import com.ayi.academy.app.entities.ClientDetails;
+import com.ayi.academy.app.exceptions.ReadAccessException;
+import com.ayi.academy.app.mappers.IAddressMapper;
+import com.ayi.academy.app.mappers.IClientDetailsMapper;
 import com.ayi.academy.app.mappers.IClientMapper;
-import com.ayi.academy.app.repositories.AddressRepository;
-import com.ayi.academy.app.repositories.ClientDetailsRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IClientService;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.bridge.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Slf4j
 @Service
@@ -28,66 +30,105 @@ public class ClientServiceImpl implements IClientService {
     @Autowired
     private IClientMapper clientMapper;
     @Autowired
-    private AddressRepository addressRepository;
+    private IClientDetailsMapper detailsMapper;
     @Autowired
-    private ClientDetailsRepository detailsRepository;
-    MessageUtil logger;
+    private IAddressMapper addressMapper;
 
     @Override
-    public ClientResponseDTO createClient(ClientRequestDTO requestDTO) {
-        Client client = clientMapper.dtoToEntity(requestDTO);
-       /* List<Address> addressList = client.getAddressList();
-        ClientDetails detailsList = detailsRepository.save(client.getClientDetailsId());
+    public List<ClientResponseDTO> getAllClients() throws ReadAccessException {
 
-        for (Address address : client.getAddressList()) {
-            address = addressRepository.save(address);
+        List<ClientResponseDTO> responseDTOList;
+        List<Client> clientList = clientRepository.findAll();
+
+        if (clientList == null || clientList.size() == 0) {
+            throw new ReadAccessException("No clients registered.");
         }
-*/
-        client = clientRepository.save(client);
+        responseDTOList = clientList.stream().map(client -> new ClientResponseDTO(
+                client.getClientId(),
+                client.getFirstName(),
+                client.getLastName(),
+                client.getDni(),
+                client.getDocumentType(),
+                client.getEmail(),
+                detailsMapper.entityToDto(client.getClientDetailsId()),
+                client.getAddressList().stream()
+                        .map(address -> new AddressResponseDTO(
+                                address.getAddressId(),
+                                address.getStreet(),
+                                address.getNumber(),
+                                address.getFloor(),
+                                address.getApartmentUnit(),
+                                address.getCity(),
+                                address.getProvince(),
+                                address.getCountry(),
+                                address.getPostalCode(),
+                                address.getClientId()
+                        )).collect(Collectors.toList())
+        )).collect(Collectors.toList());
 
-        return clientMapper.entityToDto(client);
+        return responseDTOList;
     }
 
-    /* @Override
-    public ClientWithAddressRequestDTO createClientWithAddress(ClientWithAddressRequestDTO requestDTO) {
+    @Override
+    public ClientResponseDTO findClientById(Integer id) throws ReadAccessException {
+        if(id == null || id <= 0){
+            throw new ReadAccessException("Valid ID is required");
+        }
 
-         Client client = new Client();
-         Address address = new Address();
+        ClientResponseDTO responseDTO = new ClientResponseDTO();
+        Client client = clientRepository.findById(id).get();
 
-         address.setStreet(requestDTO.getStreet());
-         address.setNumber(requestDTO.getNumber());
-         address.setFloor(requestDTO.getFloor());
-         address.setApartmentUnit(requestDTO.getApartmentUnit());
-         address.setCity(requestDTO.getCity());
-         address.setProvince(requestDTO.getProvince());
-         address.setCountry(requestDTO.getCountry());
-         address.setPostalCode(requestDTO.getPostalCode());
+        if(client == null || client.getClientId() <= 0){
+            throw new ReadAccessException("No client registered with ID " + id);
+        }
 
-         client.setFirstName(requestDTO.getFirstName());
-         client.setLastName(requestDTO.getLastName());
-         client.setDni(requestDTO.getDni());
-         client.setDocumentType(requestDTO.getDocumentType());
-         client.setEmail(requestDTO.getEmail());
-         client.getAddressList().add(address);
 
-         addressRepository.save(address);
-         clientRepository.save(client);
-         ClientWithAddressResponseDTO responseDTO = new ClientWithAddressResponseDTO();
+        responseDTO.setClientId(client.getClientId());
+        responseDTO.setFirstName(client.getFirstName());
+        responseDTO.setLastName(client.getLastName());
+        responseDTO.setDni(client.getDni());
+        responseDTO.setDocumentType(client.getDocumentType());
+        responseDTO.setEmail(client.getEmail());
+        responseDTO.setClientDetailsId(detailsMapper.entityToDto(client.getClientDetailsId()));
+        responseDTO.setAddressList(client.getAddressList().stream()
+                .map(address -> new AddressResponseDTO(
+                        address.getAddressId(),
+                        address.getStreet(),
+                        address.getNumber(),
+                        address.getFloor(),
+                        address.getApartmentUnit(),
+                        address.getCity(),
+                        address.getProvince(),
+                        address.getCountry(),
+                        address.getPostalCode(),
+                        address.getClientId()
+                )).collect(Collectors.toList()));
 
-         responseDTO.setStreet(requestDTO.getStreet());
-         responseDTO.setNumber(requestDTO.getNumber());
-         responseDTO.setFloor(requestDTO.getFloor());
-         responseDTO.setApartmentUnit(requestDTO.getApartmentUnit());
-         responseDTO.setCity(requestDTO.getCity());
-         responseDTO.setProvince(requestDTO.getProvince());
-         responseDTO.setCountry(requestDTO.getCountry());
-         responseDTO.setPostalCode(requestDTO.getPostalCode());
-         responseDTO.setFirstName(requestDTO.getFirstName());
-         responseDTO.setLastName(requestDTO.getLastName());
-         responseDTO.setDni(requestDTO.getDni());
-         responseDTO.setDocumentType(requestDTO.getDocumentType());
-         responseDTO.setEmail(requestDTO.getEmail());
-         return requestDTO;
-     }*/
+        return responseDTO;
+    }
+
+
+
+
+
+  /*  @Override
+    public ClientResponseDTO createClient(ClientRequestDTO request) {
+        //Client client = clientMapper.dtoToEntity(requestDTO);
+       // clientRepository.save(client);
+       // return clientMapper.entityToDto(client);
+
+        Client client = clientMapper.dtoToEntity(request);
+        ClientDetails clientDetail = client.getClientDetailsId();
+        //String documentNumber = client.getDocumentNumber();
+        List<Address> address = client.getAddressList();
+
+            clientDetail.setClientId(client);
+            client.setAddressList(address);
+            client = clientRepository.save(client);
+
+            return clientMapper.entityToDto(client);
+    }
+    */
+
 
 }

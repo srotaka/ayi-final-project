@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
@@ -34,11 +32,8 @@ public class AddressServiceImpl implements IAddressService {
     private AddressRepository addressRepository;
     @Autowired
     private IAddressMapper addressMapper;
-
     @Autowired
     private ClientRepository clientRepository;
-    @Autowired
-    private IClientMapper clientMapper;
 
     @Override
     public AddressResponseDTO createAddress (AddressRequestWithoutClientDTO addressRequest, Integer clientId){
@@ -72,8 +67,7 @@ public class AddressServiceImpl implements IAddressService {
                         address.getCountry(),
                         address.getPostalCode(),
                         address.getClientId()
-                ))
-                .collect(Collectors.toList());
+                )).collect(Collectors.toList());
         return responseDTOList;
     }
 
@@ -105,7 +99,7 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public AddressResponseDTO findAddressById(Integer id) throws ReadAccessException {
 
-        if(id == null || id < 0){
+        if(id == null || id <= 0){
             throw new ReadAccessException("ID is required");
         }
 
