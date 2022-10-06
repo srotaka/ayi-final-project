@@ -1,9 +1,7 @@
 package com.ayi.academy.app.mappers;
 
 import com.ayi.academy.app.dtos.request.ClientRequestDTO;
-import com.ayi.academy.app.dtos.request.ClientWithAddressRequestDTO;
 import com.ayi.academy.app.dtos.response.ClientResponseDTO;
-import com.ayi.academy.app.dtos.response.ClientWithAddressResponseDTO;
 import com.ayi.academy.app.entities.Client;
 
 public interface IClientMapper {
@@ -11,5 +9,4 @@ public interface IClientMapper {
 
     Client dtoToEntity(ClientRequestDTO requestDTO);
 
-    ClientWithAddressResponseDTO requestToResponse(ClientWithAddressRequestDTO requestDTO);
 }

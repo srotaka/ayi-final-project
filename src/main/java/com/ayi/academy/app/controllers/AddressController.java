@@ -74,8 +74,8 @@ public class AddressController {
         try {
             return ResponseEntity.ok(addressService.findAddressById(id));
         } catch (ReadAccessException e) {
-            response.put("Código de error", 404);
-            response.put("Mensaje", e.getMessage());
+            response.put("Error code", 404);
+            response.put("Message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         } catch (Exception ex) {
             response.put("Error Code", 400);

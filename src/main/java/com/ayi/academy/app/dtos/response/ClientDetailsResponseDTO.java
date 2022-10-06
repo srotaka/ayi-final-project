@@ -1,5 +1,6 @@
 package com.ayi.academy.app.dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +24,7 @@ public class ClientDetailsResponseDTO implements Serializable {
     @ApiModelProperty(notes = "Client status", position = 3)
     private Boolean isVIP;
 
-    @JsonIgnoreProperties(value = "clientDetails")
+    @JsonIgnore
     @ApiModelProperty(notes = "Client", position = 4)
     private ClientResponseDTO client;
 }
