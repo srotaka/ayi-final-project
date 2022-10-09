@@ -1,15 +1,11 @@
 package com.ayi.academy.app.services.impl;
 
 import com.ayi.academy.app.dtos.request.ClientRequestDTO;
-import com.ayi.academy.app.dtos.request.ClientWithAddressRequestDTO;
-import com.ayi.academy.app.dtos.request.ClientWithDetailsRequestDTO;
 import com.ayi.academy.app.dtos.response.*;
-import com.ayi.academy.app.entities.Address;
 import com.ayi.academy.app.entities.Client;
 import com.ayi.academy.app.exceptions.ReadAccessException;
-import com.ayi.academy.app.mappers.IAddressMapper;
-import com.ayi.academy.app.mappers.IClientDetailsMapper;
 import com.ayi.academy.app.mappers.IClientMapper;
+import com.ayi.academy.app.repositories.ClientDetailsRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IClientService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,9 +32,7 @@ public class ClientServiceImpl implements IClientService {
     @Autowired
     private IClientMapper clientMapper;
     @Autowired
-    private IClientDetailsMapper detailsMapper;
-    @Autowired
-    private IAddressMapper addressMapper;
+    ClientDetailsRepository detailsRepository;
 
     @Override
     public List<ClientResponseDTO> getAllClients() throws ReadAccessException {
@@ -52,38 +44,8 @@ public class ClientServiceImpl implements IClientService {
             throw new ReadAccessException("No clients registered.");
         }
 
-     /*   responseDTOList = clientList.stream().map(client -> new ClientResponseDTO(
-                client.getClientId(),
-                client.getFirstName(),
-                client.getLastName(),
-                client.getDni(),
-                client.getDocumentType(),
-                client.getEmail(),
-                detailsMapper.entityToDto(client.getClientDetailsId()),
-                client.getAddressList().stream()
-                        .map(address -> new AddressResponseDTO(
-                                address.getAddressId(),
-                                address.getStreet(),
-                                address.getNumber(),
-                                address.getFloor(),
-                                address.getApartmentUnit(),
-                                address.getCity(),
-                                address.getProvince(),
-                                address.getCountry(),
-                                address.getPostalCode(),
-                                address.getClientId()
-                        )).collect(Collectors.toList()),
-                client.getInvoiceList().stream()
-                        .map(invoice -> new InvoiceResponseDTO(
-                                invoice.getInvoiceId(),
-                                invoice.getDescription(),
-                                invoice.getTotalAmount(),
-                                invoice.getClientId()
-                        )).collect(Collectors.toList())
-        )).collect(Collectors.toList());
-
-      */
         List<ClientResponseDTO> responseDTOList = new ArrayList<>();
+
         clientList.forEach(client -> {
             ClientResponseDTO clientResponse = clientMapper.entityToDto(client);
             responseDTOList.add(clientResponse);
@@ -144,6 +106,9 @@ public class ClientServiceImpl implements IClientService {
     public ClientResponseDTO createClient(ClientRequestDTO request) {
         Client client = clientMapper.dtoToEntity(request);
         clientRepository.save(client);
+        //detailsRepository.save(client.getClientDetailsId());
+
+
         return clientMapper.entityToDto(client);
     }
     @Override

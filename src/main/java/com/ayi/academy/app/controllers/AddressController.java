@@ -137,7 +137,7 @@ public class AddressController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success. Paged address list retrieved.", response = AddressResponseDTO[].class),
             @ApiResponse(code = 400, message = "Bad request/Invalid field")})
-    public ResponseEntity<?> getAllPersonsForPage(
+    public ResponseEntity<?> getAddresesForPage(
             @ApiParam(value = "Page to display", required = true, example = "1")
             @PathVariable(name = "page") Integer page,
             @ApiParam(value = "Number of items per request", required = true, example = "3")

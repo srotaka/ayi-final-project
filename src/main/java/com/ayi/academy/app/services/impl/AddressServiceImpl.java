@@ -19,7 +19,6 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.lang.reflect.Field;
 
 @Slf4j
@@ -47,51 +46,32 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public List<AddressResponseDTO> getAllAddressWithoutClient() throws ReadAccessException {
 
-        List<AddressResponseDTO> responseDTOList = null;
+        List<AddressResponseDTO> responseDTOList = new ArrayList<>();
         List<Address> addressList = addressRepository.findAll();
 
         if(addressList == null || addressList.size() == 0){
             throw new ReadAccessException("No addresses registered.");
         }
 
-        responseDTOList = addressList.stream()
-                .map(address -> new AddressResponseDTO(
-                        address.getAddressId(),
-                        address.getStreet(),
-                        address.getNumber(),
-                        address.getFloor(),
-                        address.getApartmentUnit(),
-                        address.getCity(),
-                        address.getProvince(),
-                        address.getCountry(),
-                        address.getPostalCode(),
-                        address.getClientId()
-                )).collect(Collectors.toList());
+        addressList.forEach(address -> {
+            AddressResponseDTO addressResponseDTO = addressMapper.entityToDto(address);
+            responseDTOList.add(addressResponseDTO);
+        });
+
         return responseDTOList;
     }
 
     @Override
     public List<AddressResponseDTO> getAllAddressByClientId(Integer clientId)throws ReadAccessException{
-        List<AddressResponseDTO> responseDTOList = null;
+        List<AddressResponseDTO> responseDTOList = new ArrayList<>();
         List<Address> addressList = addressRepository.getAllAddressByIdClient(clientId);
         if(addressList == null || addressList.size() == 0){
             throw new ReadAccessException("No addresses registered for client ID " + clientId);
         }
-
-        responseDTOList = addressList.stream()
-                .map(address -> new AddressResponseDTO(
-                        address.getAddressId(),
-                        address.getStreet(),
-                        address.getNumber(),
-                        address.getFloor(),
-                        address.getApartmentUnit(),
-                        address.getCity(),
-                        address.getProvince(),
-                        address.getCountry(),
-                        address.getPostalCode(),
-                        address.getClientId()
-                ))
-                .collect(Collectors.toList());
+        addressList.forEach(address -> {
+            AddressResponseDTO addressResponseDTO = addressMapper.entityToDto(address);
+            responseDTOList.add(addressResponseDTO);
+        });
         return responseDTOList;
     }
 
