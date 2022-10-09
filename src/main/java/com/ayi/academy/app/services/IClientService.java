@@ -14,8 +14,6 @@ import java.util.Map;
 
 public interface IClientService {
 
-   // ClientResponseDTO createClient(ClientRequestDTO requestDTO);
-
     List<ClientResponseDTO> getAllClients() throws ReadAccessException;
 
     ClientResponseDTO findClientById(Integer id) throws ReadAccessException;
