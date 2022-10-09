@@ -1,9 +1,11 @@
 package com.ayi.academy.app.dtos.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ayi.academy.app.entities.Client;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -11,19 +13,23 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "InvoiceResponseDTO",description = "Information needed to create a Invoice")
+@ApiModel(value = "InvoiceResponseDTO",description = "Information needed to create an Invoice")
 public class InvoiceResponseDTO implements Serializable {
 
+    @NotNull
     @ApiModelProperty(notes = "The unique id of a bill", position = 1)
     private Integer billId;
 
+    @NotNull
     @ApiModelProperty(notes = "Description of the purchase",position = 2)
     private String description;
 
+    @NotNull
     @ApiModelProperty(notes = "Total amount of the purchase",position = 3)
     private Double totalAmount;
 
-    @JsonIgnoreProperties(value = "invoiceList")
+    @NotNull
+    @JsonIgnore
     @ApiModelProperty(notes = "Client ID", position = 4)
-    private ClientResponseDTO client;
+    private Client clientId;
 }

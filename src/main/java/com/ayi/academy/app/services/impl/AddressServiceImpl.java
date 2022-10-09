@@ -7,7 +7,6 @@ import com.ayi.academy.app.entities.Address;
 import com.ayi.academy.app.entities.Client;
 import com.ayi.academy.app.exceptions.ReadAccessException;
 import com.ayi.academy.app.mappers.IAddressMapper;
-import com.ayi.academy.app.mappers.IClientMapper;
 import com.ayi.academy.app.repositories.AddressRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IAddressService;

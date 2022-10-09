@@ -16,7 +16,7 @@ public interface IAddressService {
     @Transactional
     List<AddressResponseDTO> getAllAddressWithoutClient() throws ReadAccessException;
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     List<AddressResponseDTO> getAllAddressByClientId(Integer clientId)throws ReadAccessException;
 
     AddressResponseDTO findAddressById(Integer id) throws ReadAccessException;

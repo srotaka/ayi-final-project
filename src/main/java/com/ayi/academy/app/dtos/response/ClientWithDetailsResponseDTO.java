@@ -3,15 +3,15 @@ package com.ayi.academy.app.dtos.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import java.util.List;
 
+import java.util.List;
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ClientResponseDTO",description = "Information needed to create a Client with an address")
-public class ClientWithAddressResponseDTO {
+@ApiModel(value = "ClientResponseDTO",description = "Client with detail information")
+public class ClientWithDetailsResponseDTO {
 
     @ApiModelProperty(notes = "The unique id of a client",  position = 1)
     private Integer clientId;
@@ -31,7 +31,10 @@ public class ClientWithAddressResponseDTO {
     @ApiModelProperty(notes = "Client's email address", position = 6)
     private String email;
 
-    @ApiModelProperty(notes = "Client address list information", position = 7)
+    @ApiModelProperty(notes = "Client type and points information", position = 7)
+    private ClientDetailsResponseDTO clientDetailsId;
+
+    @ApiModelProperty(notes = "Client address list information", position = 8)
     private List<AddressResponseDTO> addressList;
 
 }

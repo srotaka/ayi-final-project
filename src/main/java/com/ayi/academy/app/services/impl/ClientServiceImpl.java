@@ -1,8 +1,10 @@
 package com.ayi.academy.app.services.impl;
 
-import com.ayi.academy.app.dtos.response.AddressResponseDTO;
-import com.ayi.academy.app.dtos.response.ClientResponseDTO;
-import com.ayi.academy.app.dtos.response.ClientResponsePages;
+import com.ayi.academy.app.dtos.request.ClientRequestDTO;
+import com.ayi.academy.app.dtos.request.ClientWithAddressRequestDTO;
+import com.ayi.academy.app.dtos.request.ClientWithDetailsRequestDTO;
+import com.ayi.academy.app.dtos.response.*;
+import com.ayi.academy.app.entities.Address;
 import com.ayi.academy.app.entities.Client;
 import com.ayi.academy.app.exceptions.ReadAccessException;
 import com.ayi.academy.app.mappers.IAddressMapper;
@@ -17,12 +19,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.Arrays.stream;
 
 @Slf4j
 @Service
@@ -41,14 +45,14 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public List<ClientResponseDTO> getAllClients() throws ReadAccessException {
 
-        List<ClientResponseDTO> responseDTOList;
         List<Client> clientList = clientRepository.findAll();
-        
+
 
         if (clientList == null || clientList.size() == 0) {
             throw new ReadAccessException("No clients registered.");
         }
-        responseDTOList = clientList.stream().map(client -> new ClientResponseDTO(
+
+     /*   responseDTOList = clientList.stream().map(client -> new ClientResponseDTO(
                 client.getClientId(),
                 client.getFirstName(),
                 client.getLastName(),
@@ -68,49 +72,44 @@ public class ClientServiceImpl implements IClientService {
                                 address.getCountry(),
                                 address.getPostalCode(),
                                 address.getClientId()
+                        )).collect(Collectors.toList()),
+                client.getInvoiceList().stream()
+                        .map(invoice -> new InvoiceResponseDTO(
+                                invoice.getInvoiceId(),
+                                invoice.getDescription(),
+                                invoice.getTotalAmount(),
+                                invoice.getClientId()
                         )).collect(Collectors.toList())
         )).collect(Collectors.toList());
+
+      */
+        List<ClientResponseDTO> responseDTOList = new ArrayList<>();
+        clientList.forEach(client -> {
+            ClientResponseDTO clientResponse = clientMapper.entityToDto(client);
+            responseDTOList.add(clientResponse);
+        });
+
 
         return responseDTOList;
     }
 
     @Override
     public ClientResponseDTO findClientById(Integer id) throws ReadAccessException {
-        if(id == null || id <= 0){
+        if (id == null || id <= 0) {
             throw new ReadAccessException("Valid ID is required");
         }
 
         ClientResponseDTO responseDTO = new ClientResponseDTO();
         Client client = clientRepository.findById(id).get();
 
-        if(client == null || client.getClientId() <= 0){
+        if (client == null || client.getClientId() <= 0) {
             throw new ReadAccessException("No client registered with ID " + id);
         }
-
-
-        responseDTO.setClientId(client.getClientId());
-        responseDTO.setFirstName(client.getFirstName());
-        responseDTO.setLastName(client.getLastName());
-        responseDTO.setDni(client.getDni());
-        responseDTO.setDocumentType(client.getDocumentType());
-        responseDTO.setEmail(client.getEmail());
-        responseDTO.setClientDetailsId(detailsMapper.entityToDto(client.getClientDetailsId()));
-        responseDTO.setAddressList(client.getAddressList().stream()
-                .map(address -> new AddressResponseDTO(
-                        address.getAddressId(),
-                        address.getStreet(),
-                        address.getNumber(),
-                        address.getFloor(),
-                        address.getApartmentUnit(),
-                        address.getCity(),
-                        address.getProvince(),
-                        address.getCountry(),
-                        address.getPostalCode(),
-                        address.getClientId()
-                )).collect(Collectors.toList()));
+        responseDTO = clientMapper.entityToDto(client);
 
         return responseDTO;
     }
+
     @Override
     public void deleteClient(Integer id) throws ReadAccessException {
         Optional<Client> client = clientRepository.findById(id);
@@ -128,7 +127,7 @@ public class ClientServiceImpl implements IClientService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Client> clientPage = clientRepository.findAll(pageable);
 
-        if(clientPage != null && !clientPage.isEmpty()) {
+        if (clientPage != null && !clientPage.isEmpty()) {
             clientResponsePages = clientMapper.pagedClientList(clientPage.getContent());
             clientResponsePages.setClientsPerPage(clientPage.getSize());
             clientResponsePages.setCurrentPage(clientPage.getNumber() + 1);
@@ -141,25 +140,38 @@ public class ClientServiceImpl implements IClientService {
     }
 
 
-
-  /*  @Override
+    @Override
     public ClientResponseDTO createClient(ClientRequestDTO request) {
-        //Client client = clientMapper.dtoToEntity(requestDTO);
-       // clientRepository.save(client);
-       // return clientMapper.entityToDto(client);
-
         Client client = clientMapper.dtoToEntity(request);
-        ClientDetails clientDetail = client.getClientDetailsId();
-        //String documentNumber = client.getDocumentNumber();
-        List<Address> address = client.getAddressList();
-
-            clientDetail.setClientId(client);
-            client.setAddressList(address);
-            client = clientRepository.save(client);
-
-            return clientMapper.entityToDto(client);
+        clientRepository.save(client);
+        return clientMapper.entityToDto(client);
     }
-    */
+    @Override
+    public ClientWithDetailsResponseDTO updateClient(Integer id, Map<String, Object> fields) throws ReadAccessException {
+        if(id == null || id < 0){
+            throw new ReadAccessException("ID is required (first validation)");
+        }
+        ClientWithDetailsResponseDTO clientDetailsResponseDTO;
+        Optional<Client> clientOptional = clientRepository.findById(id);
+
+        if (!clientOptional.isPresent()) {
+            throw new ReadAccessException("No client found with that id");
+        }
+
+        try {
+            fields.forEach((key, value) -> {
+                Field field = ReflectionUtils.findField(Client.class, (String) key);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, clientOptional.get(), value);
+                System.out.println();
+            });
+            Client updatedClient = clientRepository.save(clientOptional.get());
+
+            return clientMapper.clientWithDetailsEntityToDto(updatedClient);
+        }catch (Exception e) {
+            throw new ReadAccessException("ID is required last catch");
+        }
+    }
 
 
 }

@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ClientRequestDTO",description = "Information needed to create a Client")
+@ApiModel(value = "ClientRequestDTO",description = "Client with addresses, invoices and details information")
 public class ClientRequestDTO implements Serializable {
 
     @NotNull(message="Client's first name is required")
@@ -38,8 +39,8 @@ public class ClientRequestDTO implements Serializable {
     private ClientDetailsRequestDTO clientDetailsId;
 
     @ApiModelProperty(notes = "Client address list information", position = 7)
-    private AddressRequestDTO addressRequest;
+    private List<AddressRequestDTO> addressList;
 
-  /*  @ApiModelProperty(notes = "Client bill list information", position = 8)
-    private InvoiceRequestDTO billRequest;*/
+    @ApiModelProperty(notes = "Client bill list information", position = 8)
+    private List<InvoiceRequestDTO> invoiceList;
 }

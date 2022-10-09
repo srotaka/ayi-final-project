@@ -24,6 +24,6 @@ public class ClientDetailsResponseDTO implements Serializable {
     private Boolean isVIP;
 
     @JsonIgnore
-    @ApiModelProperty(notes = "Client", position = 4)
+    @ApiModelProperty(notes = "Client", position = 4, hidden = true)
     private ClientResponseDTO client;
 }
