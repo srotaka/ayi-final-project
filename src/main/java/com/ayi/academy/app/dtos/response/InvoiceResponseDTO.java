@@ -17,8 +17,8 @@ import java.io.Serializable;
 public class InvoiceResponseDTO implements Serializable {
 
     @NotNull
-    @ApiModelProperty(notes = "The unique id of a bill", position = 1)
-    private Integer billId;
+    @ApiModelProperty(notes = "The unique id of an invoice", position = 1)
+    private Integer invoiceId;
 
     @NotNull
     @ApiModelProperty(notes = "Description of the purchase",position = 2)
