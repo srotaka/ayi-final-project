@@ -1,5 +1,7 @@
 package com.ayi.academy.app.dtos.request;
 
+import com.ayi.academy.app.entities.Client;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -21,5 +23,9 @@ public class ClientDetailsRequestDTO implements Serializable {
     @ApiModelProperty(notes = "Client status is required", example = "1", position = 2)
     private Boolean isVIP;
 
+    @NotNull(message = "Client ID")
+    @JsonIgnore
+    @ApiModelProperty(position = 3)
+    private Client clientId;
 
 }

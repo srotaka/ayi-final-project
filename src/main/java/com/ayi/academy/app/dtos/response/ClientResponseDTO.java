@@ -1,9 +1,5 @@
 package com.ayi.academy.app.dtos.response;
 
-import com.ayi.academy.app.entities.Address;
-import com.ayi.academy.app.entities.ClientDetails;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -42,6 +38,6 @@ public class ClientResponseDTO implements Serializable {
     @ApiModelProperty(notes = "Client address list information", position = 8)
     private List<AddressResponseDTO> addressList;
 
-   /* @ApiModelProperty(notes = "Client bill list information", position = 9)
-    private List<InvoiceResponseDTO> billList;*/
+    @ApiModelProperty(notes = "Client invoice list information", position = 9)
+    private List<InvoiceResponseDTO> invoiceList;
 }

@@ -3,7 +3,9 @@ package com.ayi.academy.app.dtos.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -11,9 +13,8 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ClientResponseDTO",description = "Information needed to create a Client")
-public class ClientWithAddressRequestDTO{
-
+@ApiModel(value = "ClientRequestDTO",description = "Client with detail information")
+public class ClientWithDetailsRequestDTO {
     @NotNull(message="Client's first name is required")
     @ApiModelProperty(example = "Tomás", required = true, position = 1)
     private String firstName;
@@ -34,8 +35,9 @@ public class ClientWithAddressRequestDTO{
     @ApiModelProperty(notes = "Client's email address", example = "tomas@mail.com",  position = 5)
     private String email;
 
-    @ApiModelProperty(notes = "Client address list information", position = 6)
+    @ApiModelProperty(notes = "Client type and points information",position = 6)
+    private ClientDetailsRequestDTO clientDetailsId;
+
+    @ApiModelProperty(notes = "Client address list information", position = 7)
     private List<AddressRequestDTO> addressList;
-
-
 }

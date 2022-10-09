@@ -23,6 +23,6 @@ public class Invoice {
     private Double totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "client", referencedColumnName = "client_id")
-    private Client client;
+    @JoinColumn(name = "client_id")
+    private Client clientId;
 }

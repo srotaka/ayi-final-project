@@ -42,7 +42,7 @@ public class Client {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addressList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Invoice> invoiceList = new ArrayList<>();
 
 }
