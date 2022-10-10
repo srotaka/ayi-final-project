@@ -2,9 +2,15 @@ package com.ayi.academy.app.services.impl;
 
 import com.ayi.academy.app.dtos.request.ClientRequestDTO;
 import com.ayi.academy.app.dtos.response.*;
+import com.ayi.academy.app.entities.Address;
 import com.ayi.academy.app.entities.Client;
+import com.ayi.academy.app.entities.ClientDetails;
+import com.ayi.academy.app.entities.Invoice;
 import com.ayi.academy.app.exceptions.ReadAccessException;
+import com.ayi.academy.app.mappers.IAddressMapper;
+import com.ayi.academy.app.mappers.IClientDetailsMapper;
 import com.ayi.academy.app.mappers.IClientMapper;
+import com.ayi.academy.app.mappers.IInvoiceMapper;
 import com.ayi.academy.app.repositories.ClientDetailsRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IClientService;
@@ -32,7 +38,11 @@ public class ClientServiceImpl implements IClientService {
     @Autowired
     private IClientMapper clientMapper;
     @Autowired
-    ClientDetailsRepository detailsRepository;
+    private IClientDetailsMapper detailsMapper;
+    @Autowired
+    private IAddressMapper addressMapper;
+    @Autowired
+    private IInvoiceMapper invoiceMapper;
 
     @Override
     public List<ClientResponseDTO> getAllClients() throws ReadAccessException {
@@ -105,9 +115,18 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public ClientResponseDTO createClient(ClientRequestDTO request) {
         Client client = clientMapper.dtoToEntity(request);
-        clientRepository.save(client);
-        //detailsRepository.save(client.getClientDetailsId());
+        ClientDetails details = detailsMapper.dtoToEntity(request.getClientDetailsId());
+        Address address = addressMapper.dtoToEntity(request.getAddressList().get(0));
+        Invoice invoice = invoiceMapper.dtoToEntity(request.getInvoiceList().get(0));
 
+        details.setClientId(client);
+        client.setClientDetailsId(details);
+        clientRepository.save(client);
+       /* address.setClientId(client);
+        invoice.setClientId(client);
+
+        client.getAddressList().add(address);
+        client.getInvoiceList().add(invoice);*/
 
         return clientMapper.entityToDto(client);
     }

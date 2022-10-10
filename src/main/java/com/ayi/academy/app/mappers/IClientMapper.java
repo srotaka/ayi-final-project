@@ -22,11 +22,9 @@ public interface IClientMapper {
 
     ClientWithAddressResponseDTO clientWithAddressEntityToDto(Client entity);
 
-    ClientResponseDTO entityToDto2(Client entity);
-
     Client dtoToEntity(ClientRequestDTO requestDTO);
 
-    Client dtoToEntityo2(ClientRequestDTO requestDTO);
+    Client newClientDtoToEntity(ClientRequestDTO requestDTO);
 
     ClientResponsePages pagedClientList(List<Client> clientList);
 }
