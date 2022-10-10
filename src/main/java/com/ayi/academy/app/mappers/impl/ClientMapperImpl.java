@@ -6,6 +6,7 @@ import com.ayi.academy.app.dtos.request.ClientWithDetailsRequestDTO;
 import com.ayi.academy.app.dtos.response.*;
 import com.ayi.academy.app.entities.Address;
 import com.ayi.academy.app.entities.Client;
+import com.ayi.academy.app.entities.ClientDetails;
 import com.ayi.academy.app.entities.Invoice;
 import com.ayi.academy.app.mappers.IClientMapper;
 import lombok.AllArgsConstructor;
@@ -23,9 +24,10 @@ public class ClientMapperImpl implements IClientMapper {
     private final ModelMapper modelMapper;
     @Autowired
     private ClientDetailsMapperImpl detailsMapper;
-
     @Autowired
     private AddressMapperImpl addressMapper;
+    @Autowired
+    private InvoiceMapperImpl invoiceMapper;
 
 
     @Override
@@ -60,55 +62,22 @@ public class ClientMapperImpl implements IClientMapper {
 
     }
 
-
     @Override
-    public ClientResponseDTO entityToDto2(Client entity){
-        ClientResponseDTO responseDTO = new ClientResponseDTO();
-        responseDTO.setFirstName(entity.getFirstName());
-        responseDTO.setLastName(entity.getLastName());
-        responseDTO.setDni(entity.getDni());
-        responseDTO.setDocumentType(entity.getDocumentType());
-        responseDTO.setEmail(entity.getEmail());
-        responseDTO.setClientDetailsId(detailsMapper.entityToDto(entity.getClientDetailsId()));
-        responseDTO.setAddressList(entity.getAddressList().stream()
-                .map(address -> new AddressResponseDTO(
-                        address.getAddressId(),
-                        address.getStreet(),
-                        address.getNumber(),
-                        address.getFloor(),
-                        address.getApartmentUnit(),
-                        address.getCity(),
-                        address.getProvince(),
-                        address.getCountry(),
-                        address.getPostalCode(),
-                        address.getClientId()
-                )).collect(Collectors.toList()));
-        responseDTO.setInvoiceList(entity.getInvoiceList().stream()
-                .map(invoice -> new InvoiceResponseDTO(
-                        invoice.getInvoiceId(),
-                        invoice.getDescription(),
-                        invoice.getTotalAmount(),
-                        invoice.getClientId()
-                )).collect(Collectors.toList()));
-
-
-        /*responseDTO.setAddressList(entity.getAddressList().stream()
-                .map(address -> modelMapper.map(entity, AddressResponseDTO.class))
-                .collect(Collectors.toList()));
-        responseDTO.setInvoiceList(entity.getInvoiceList().stream()
-                .map(invoice -> modelMapper.map(entity, InvoiceResponseDTO.class))
-                .collect(Collectors.toList()));
-
-         */
-        return responseDTO;
-    }
-
-
-    @Override
-    public Client dtoToEntityo2(ClientRequestDTO requestDTO){
+    public Client newClientDtoToEntity(ClientRequestDTO requestDTO){
         Client entity = new Client();
+        ClientDetails details = detailsMapper.dtoToEntity(requestDTO.getClientDetailsId());
+        Address address = addressMapper.dtoToEntity(requestDTO.getAddressList().get(0));
+        Invoice invoice = invoiceMapper.dtoToEntity(requestDTO.getInvoiceList().get(0));
 
-        entity.setFirstName(requestDTO.getFirstName());
+        details.setClientId(entity);
+        address.setClientId(entity);
+        invoice.setClientId(entity);
+        entity.setClientDetailsId(details);
+        entity.getAddressList().add(address);
+        entity.getInvoiceList().add(invoice);
+
+
+       /* entity.setFirstName(requestDTO.getFirstName());
         entity.setLastName(requestDTO.getLastName());
         entity.setDni(requestDTO.getDni());
         entity.setDocumentType(requestDTO.getDocumentType());
@@ -120,8 +89,7 @@ public class ClientMapperImpl implements IClientMapper {
         entity.setInvoiceList(requestDTO.getInvoiceList().stream()
                 .map(invoice -> modelMapper.map(requestDTO, Invoice.class))
                 .collect(Collectors.toList()));
-
-
+*/
         return entity;
     }
     @Override

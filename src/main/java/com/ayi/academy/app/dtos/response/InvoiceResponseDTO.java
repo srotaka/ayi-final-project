@@ -30,6 +30,6 @@ public class InvoiceResponseDTO implements Serializable {
 
     @NotNull
     @JsonIgnore
-    @ApiModelProperty(notes = "Client ID", position = 4)
+    @ApiModelProperty(notes = "Client ID", required = true, position = 4, hidden = true)
     private Client clientId;
 }

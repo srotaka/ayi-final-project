@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class AddressController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Retrieves an addresses filtered by ID.", httpMethod = "GET", response = AddressResponseDTO[].class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK. List retrieved successfully.", response = AddressResponseDTO[].class),
+            @ApiResponse(code = 200, message = "OK. Address retrieved successfully.", response = AddressResponseDTO[].class),
             @ApiResponse(code = 404, message = "No address found."),
             @ApiResponse(code = 400, message = "Bad request/Invalid field")})
     public ResponseEntity<?> getAddressById(
@@ -94,7 +95,7 @@ public class AddressController {
     public ResponseEntity<?> getAllAddressByClientId(
             @ApiParam(name = "id", required = true, value = "Client Id", example = "1")
             @RequestParam Integer id) {
-        List<AddressResponseDTO> responseDTOList = null;
+        List<AddressResponseDTO> responseDTOList = new ArrayList<>();
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -154,18 +155,6 @@ public class AddressController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(addressPages, HttpStatus.OK);
-    }
-
-    @PatchMapping("/updateAddress/{id}")
-    @ApiOperation(value = "Updates address information", httpMethod = "PATCH", response = AddressResponseDTO.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success. Address updated.", response = AddressResponseDTO.class),
-            @ApiResponse(code = 400, message = "Bad request/Invalid field")})
-    public AddressResponseDTO updateAddress(@PathVariable Integer id, @RequestBody Map<String, Object> fields) throws ReadAccessException {
-
-        AddressResponseDTO addressResponseDTO;
-        addressResponseDTO = addressService.updateAddress(id, fields);
-        return addressResponseDTO;
     }
 
 
