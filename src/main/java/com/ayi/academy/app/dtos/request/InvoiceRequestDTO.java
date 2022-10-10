@@ -1,5 +1,6 @@
 package com.ayi.academy.app.dtos.request;
 
+import com.ayi.academy.app.entities.Client;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,7 +25,7 @@ public class InvoiceRequestDTO implements Serializable {
     private Double totalAmount;
 
     @NotNull(message = "Client ID")
-    @ApiModelProperty(hidden = true)
     @JsonIgnore
-    private ClientRequestDTO clientId;
+    @ApiModelProperty(hidden = true)
+    private Client clientId;
 }
