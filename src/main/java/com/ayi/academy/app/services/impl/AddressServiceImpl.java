@@ -33,8 +33,18 @@ public class AddressServiceImpl implements IAddressService {
     @Autowired
     private ClientRepository clientRepository;
 
+    /**
+     * This method allows to register a new address if client ID exists.
+     * @param addressRequest
+     * @param clientId
+     * @throws ReadAccessException
+     */
     @Override
-    public AddressResponseDTO createAddress (AddressRequestWithoutClientDTO addressRequest, Integer clientId){
+    public AddressResponseDTO createAddress (AddressRequestWithoutClientDTO addressRequest, Integer clientId) throws ReadAccessException {
+
+        if(clientId == null || clientId <= 0){
+            throw new ReadAccessException("Client ID is required.");
+        }
         Address address = addressMapper.convertDtoToEntityWithoutClient(addressRequest);
         Client client = clientRepository.findById(clientId).get();
 
@@ -43,6 +53,10 @@ public class AddressServiceImpl implements IAddressService {
         return addressMapper.entityToDto(address);
     }
 
+    /**
+     * This method retrieves a list of all addresses registered in database (without client information).
+     * @throws ReadAccessException
+     */
     @Override
     public List<AddressResponseDTO> getAllAddressWithoutClient() throws ReadAccessException {
 
@@ -61,6 +75,11 @@ public class AddressServiceImpl implements IAddressService {
         return responseDTOList;
     }
 
+    /**
+     * This method retrieves a list of all addresses registered by a client. Client ID must be valid.
+     * @param clientId
+     * @throws ReadAccessException
+     */
     @Override
     public List<AddressResponseDTO> getAllAddressByClientId(Integer clientId)throws ReadAccessException{
         List<AddressResponseDTO> responseDTOList = new ArrayList<>();
@@ -75,6 +94,11 @@ public class AddressServiceImpl implements IAddressService {
         return responseDTOList;
     }
 
+    /**
+     * This method retrieves an address by its ID.
+     * @param id
+     * @throws ReadAccessException
+     */
     @Override
     public AddressResponseDTO findAddressById(Integer id) throws ReadAccessException {
 
@@ -91,6 +115,12 @@ public class AddressServiceImpl implements IAddressService {
 
         return addressResponseDTO = addressMapper.entityToDto(address.get());
     }
+
+    /**
+     * This method deletes a registered address.
+     * @param id
+     * @throws ReadAccessException
+     */
     @Override
     public void deleteAddress(Integer id) throws ReadAccessException {
         Optional<Address> address = addressRepository.findById(id);
@@ -101,6 +131,12 @@ public class AddressServiceImpl implements IAddressService {
         }
     }
 
+    /**
+     * This method retrieves a list of all paginated addresses.
+     * @param page
+     * @param size
+     * @throws ReadAccessException
+     */
     @Override
     public AddressResponsePages getPagedAddresses(Integer page, Integer size) throws ReadAccessException {
 
@@ -120,6 +156,13 @@ public class AddressServiceImpl implements IAddressService {
         }
     }
 
+    /**
+     * This method allows to update the necessary information of an address.
+     * No need to enter all address info. Only the ones needed.
+     * @param id
+     * @param fields
+     * @throws ReadAccessException
+     */
     @Override
     public AddressResponseDTO  updateAddress(Integer id, Map<String, Object> fields) throws ReadAccessException {
         if(id == null || id < 0){

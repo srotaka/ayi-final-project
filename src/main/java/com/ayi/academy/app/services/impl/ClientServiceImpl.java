@@ -44,6 +44,10 @@ public class ClientServiceImpl implements IClientService {
     @Autowired
     private IInvoiceMapper invoiceMapper;
 
+    /**
+     * This method retrieves a list of all clients registered in database.
+     * @throws ReadAccessException
+     */
     @Override
     public List<ClientResponseDTO> getAllClients() throws ReadAccessException {
 
@@ -64,7 +68,11 @@ public class ClientServiceImpl implements IClientService {
 
         return responseDTOList;
     }
-
+    /**
+     * This method retrieves a client by its ID.
+     * @param id
+     * @throws ReadAccessException
+     */
     @Override
     public ClientResponseDTO findClientById(Integer id) throws ReadAccessException {
         if (id == null || id <= 0) {
@@ -82,6 +90,11 @@ public class ClientServiceImpl implements IClientService {
         return responseDTO;
     }
 
+    /**
+     * This method deletes a registered client.
+     * @param id
+     * @throws ReadAccessException
+     */
     @Override
     public void deleteClient(Integer id) throws ReadAccessException {
         Optional<Client> client = clientRepository.findById(id);
@@ -92,6 +105,12 @@ public class ClientServiceImpl implements IClientService {
         }
     }
 
+    /**
+     * This method retrieves a list of all paginated clients.
+     * @param page
+     * @param size
+     * @throws ReadAccessException
+     */
     @Override
     public ClientResponsePages getPagedClients(Integer page, Integer size) throws ReadAccessException {
 
@@ -111,10 +130,25 @@ public class ClientServiceImpl implements IClientService {
         }
     }
 
-
+    /**
+     * This method allows to register a new client.
+     * DNI and email must be uniques.
+     * @param request
+     * @throws ReadAccessException
+     */
     @Override
-    public ClientResponseDTO createClient(ClientRequestDTO request) {
+    public ClientResponseDTO createClient(ClientRequestDTO request) throws ReadAccessException {
+
         Client client = clientMapper.dtoToEntity(request);
+        Optional<Client> clientDni = Optional.ofNullable(clientRepository.findByDni(client.getDni()));
+        if(clientDni.isPresent()){
+            throw new ReadAccessException("DNI already registered.");
+        }
+        Optional<Client> clientEmail = Optional.ofNullable(clientRepository.findByEmail(client.getEmail()));
+        if(clientEmail.isPresent()){
+            throw new ReadAccessException("Email already registered.");
+        }
+
         ClientDetails details = detailsMapper.dtoToEntity(request.getClientDetailsId());
         Address address = addressMapper.dtoToEntity(request.getAddressList().get(0));
         Invoice invoice = invoiceMapper.dtoToEntity(request.getInvoiceList().get(0));
@@ -122,14 +156,16 @@ public class ClientServiceImpl implements IClientService {
         details.setClientId(client);
         client.setClientDetailsId(details);
         clientRepository.save(client);
-       /* address.setClientId(client);
-        invoice.setClientId(client);
-
-        client.getAddressList().add(address);
-        client.getInvoiceList().add(invoice);*/
 
         return clientMapper.entityToDto(client);
     }
+    /**
+     * This method allows to update the necessary information of a client.
+     * No need to enter all client info. Only the ones needed.
+     * @param id
+     * @param fields
+     * @throws ReadAccessException
+     */
     @Override
     public ClientWithDetailsResponseDTO updateClient(Integer id, Map<String, Object> fields) throws ReadAccessException {
         if(id == null || id < 0){

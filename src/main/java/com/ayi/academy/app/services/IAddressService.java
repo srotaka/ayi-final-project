@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface IAddressService {
     @Transactional
-    AddressResponseDTO createAddress (AddressRequestWithoutClientDTO requestDTO, Integer clientId);
+    AddressResponseDTO createAddress (AddressRequestWithoutClientDTO requestDTO, Integer clientId) throws ReadAccessException;
 
     @Transactional
     List<AddressResponseDTO> getAllAddressWithoutClient() throws ReadAccessException;

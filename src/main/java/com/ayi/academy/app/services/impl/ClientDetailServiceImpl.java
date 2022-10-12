@@ -21,8 +21,17 @@ public class ClientDetailServiceImpl implements IClientDetailsService {
     @Autowired
     IClientDetailsMapper detailsMapper;
 
+    /**
+     * This method retrieves client detail information. Client ID must be valid.
+     * @param clientId
+     * @throws ReadAccessException
+     */
     @Override
     public ClientDetailsResponseDTO getClientDetailsByClientId(Integer clientId)throws ReadAccessException {
+        if(clientId == null || clientId <= 0){
+            throw new ReadAccessException("Client ID is required.");
+        }
+
         ClientDetails response =  detailsRepository.getClientDetailsByClientId(clientId);
         if(response == null){
             throw new ReadAccessException("No details registered for client ID " + clientId);
