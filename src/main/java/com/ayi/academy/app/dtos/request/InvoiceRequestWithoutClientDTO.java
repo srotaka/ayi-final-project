@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "InvoiceRequestWithoutClientDTO",description = "Information needed to create an Invoice")
-public class InvoiceRequestWithoutClientDTO {
+public class InvoiceRequestWithoutClientDTO implements Serializable {
 
     @NotNull(message = "The description of purchase")
     @ApiModelProperty(example = "Monopatín", position = 1)

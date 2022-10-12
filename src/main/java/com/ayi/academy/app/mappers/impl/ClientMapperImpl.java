@@ -36,6 +36,11 @@ public class ClientMapperImpl implements IClientMapper {
         return modelMapper.map(entity, ClientResponseDTO.class);
     }
     @Override
+    public ClientBasicResponseDTO entityBasicToDto(Client entity){
+
+        return modelMapper.map(entity, ClientBasicResponseDTO.class);
+    }
+    @Override
     public Client dtoToEntity(ClientRequestDTO requestDTO){
 
         return modelMapper.map(requestDTO, Client.class);

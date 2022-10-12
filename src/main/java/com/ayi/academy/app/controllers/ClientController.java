@@ -49,6 +49,26 @@ public class ClientController {
             return ResponseEntity.ok(responseDTOList);
         }
 
+    @GetMapping(value = "/getClientListBasicInfo")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Retrieves a list with all clients with their basic information.", httpMethod = "GET", response = ClientBasicResponseDTO[].class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK. List retrieved successfully.", response = ClientBasicResponseDTO[].class),
+            @ApiResponse(code = 404, message = "No client found."),
+            @ApiResponse(code = 400, message = "Bad request/Invalid field")})
+    public ResponseEntity<?> getAllClientsWithBasicInfo() {
+        List<ClientBasicResponseDTO> responseDTOList = new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            responseDTOList = clientService.getAllClientsWithBasicInfo();
+        } catch (ReadAccessException e) {
+            response.put("Message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(responseDTOList);
+    }
+
     @GetMapping(value = "/getClientById/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Retrieves a client filtered by ID.", httpMethod = "GET", response = ClientResponseDTO[].class)
