@@ -34,6 +34,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Autowired
     IInvoiceMapper invoiceMapper;
 
+    /**
+     * This method retrieves a list of all invoices registered in database (without client information).
+     * @throws ReadAccessException
+     */
     @Override
     public List<InvoiceResponseDTO> getAllInvoices() throws ReadAccessException {
 
@@ -51,6 +55,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return responseDTOList;
     }
 
+    /**
+     * This method retrieves a list of all invoices registered by a client. Client ID must be valid.
+     * @param clientId
+     * @throws ReadAccessException
+     */
     @Override
     public List<InvoiceResponseDTO> getAllInvoicesByClientId(Integer clientId)throws ReadAccessException{
         List<InvoiceResponseDTO> responseDTOList = new ArrayList<>();
@@ -65,6 +74,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return responseDTOList;
     }
 
+    /**
+     * This method retrieves an invoice by its ID.
+     * @param id
+     * @throws ReadAccessException
+     */
     @Override
     public InvoiceResponseDTO findInvoiceById(Integer id) throws ReadAccessException {
 
@@ -81,6 +95,12 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceResponseDTO = invoiceMapper.entityToDto(invoice.get());
     }
 
+    /**
+     * This method retrieves a list of all paginated invoices.
+     * @param page
+     * @param size
+     * @throws ReadAccessException
+     */
     @Override
     public InvoiceResponsePages getPagedInvoices(Integer page, Integer size) throws ReadAccessException {
 
@@ -99,9 +119,20 @@ public class InvoiceServiceImpl implements IInvoiceService {
             throw new ReadAccessException("Error paginating address information");
         }
     }
+
+    /**
+     * This method allows to register a new invoice if client ID exists.
+     * @param invoiceRequest
+     * @param clientId
+     * @throws ReadAccessException
+     */
     @Override
-    public InvoiceResponseDTO createInvoice(InvoiceRequestWithoutClientDTO request, Integer clientId){
-        Invoice invoice = invoiceMapper.convertDtoToEntityWithoutClient(request);
+    public InvoiceResponseDTO createInvoice(InvoiceRequestWithoutClientDTO invoiceRequest, Integer clientId) throws ReadAccessException {
+        if(clientId == null || clientId <= 0){
+            throw new ReadAccessException("Client ID is required.");
+        }
+
+        Invoice invoice = invoiceMapper.convertDtoToEntityWithoutClient(invoiceRequest);
         Client client = clientRepository.findById(clientId).get();
 
         invoice.setClientId(client);

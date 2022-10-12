@@ -135,7 +135,7 @@ public class ClientController {
     })
     public ResponseEntity<ClientResponseDTO> createClient (
             @ApiParam(value = "Client data information", required = true)
-            @RequestBody ClientRequestDTO  request) {
+            @RequestBody ClientRequestDTO  request) throws ReadAccessException {
 
         ClientResponseDTO responseDTO = clientService.createClient(request);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);

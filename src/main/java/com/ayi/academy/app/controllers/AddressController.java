@@ -34,7 +34,7 @@ public class AddressController {
             @ApiResponse(code = 201, message = "Created. Address was successfully created.", response = AddressResponseDTO.class),
             @ApiResponse(code = 400, message = "Bad request/Invalid field")
     })
-    public ResponseEntity<AddressResponseDTO> addAddress(@RequestBody AddressRequestWithoutClientDTO request, Integer clientId) {
+    public ResponseEntity<AddressResponseDTO> addAddress(@RequestBody AddressRequestWithoutClientDTO request, Integer clientId) throws ReadAccessException {
         AddressResponseDTO addressResponse = addressService.createAddress(request, clientId);
         return new ResponseEntity<>(addressResponse, HttpStatus.CREATED);
     }

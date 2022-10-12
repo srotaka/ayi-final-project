@@ -22,7 +22,7 @@ public interface IClientService {
 
     ClientResponsePages getPagedClients(Integer page, Integer size) throws ReadAccessException;
 
-    ClientResponseDTO createClient(ClientRequestDTO request);
+    ClientResponseDTO createClient(ClientRequestDTO request) throws ReadAccessException;
 
     ClientWithDetailsResponseDTO updateClient(Integer id, Map<String, Object> fields) throws ReadAccessException;
 }

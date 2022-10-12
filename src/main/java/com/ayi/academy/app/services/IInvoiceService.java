@@ -17,5 +17,5 @@ public interface IInvoiceService {
 
     InvoiceResponsePages getPagedInvoices(Integer page, Integer size) throws ReadAccessException;
 
-    InvoiceResponseDTO createInvoice (InvoiceRequestWithoutClientDTO request, Integer clientId);
+    InvoiceResponseDTO createInvoice (InvoiceRequestWithoutClientDTO request, Integer clientId) throws ReadAccessException;
 }

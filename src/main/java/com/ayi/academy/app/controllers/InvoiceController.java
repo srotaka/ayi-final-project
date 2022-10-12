@@ -37,7 +37,8 @@ public class InvoiceController {
             @ApiResponse(code = 201, message = "Created. Invoice was successfully created.", response = InvoiceResponseDTO.class),
             @ApiResponse(code = 400, message = "Bad request/Invalid field")
     })
-    public ResponseEntity<InvoiceResponseDTO> addInvoice(@RequestBody InvoiceRequestWithoutClientDTO request, Integer clientId) {
+    public ResponseEntity<InvoiceResponseDTO> addInvoice(@RequestBody InvoiceRequestWithoutClientDTO request, Integer clientId) throws ReadAccessException {
+
         InvoiceResponseDTO invoiceResponse = invoiceService.createInvoice(request, clientId);
         return new ResponseEntity<>(invoiceResponse, HttpStatus.CREATED);
     }
