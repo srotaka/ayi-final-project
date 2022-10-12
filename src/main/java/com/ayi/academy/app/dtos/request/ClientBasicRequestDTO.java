@@ -7,15 +7,14 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ClientRequestDTO",description = "Client with detail information")
-public class ClientWithDetailsRequestDTO implements Serializable {
+@ApiModel(value = "ClientRequestDTO",description = "Client with addresses, invoices and details information")
+public class ClientBasicRequestDTO implements Serializable {
     @NotNull(message="Client's first name is required")
     @ApiModelProperty(example = "Tomás", required = true, position = 1)
     private String firstName;
@@ -35,10 +34,4 @@ public class ClientWithDetailsRequestDTO implements Serializable {
     @Email(regexp = "[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", message = "Email format must be valid")
     @ApiModelProperty(notes = "Client's email address", example = "tomas@mail.com",  position = 5)
     private String email;
-
-    @ApiModelProperty(notes = "Client type and points information",position = 6)
-    private ClientDetailsRequestDTO clientDetailsId;
-
-    @ApiModelProperty(notes = "Client address list information", position = 7)
-    private List<AddressRequestDTO> addressList;
 }

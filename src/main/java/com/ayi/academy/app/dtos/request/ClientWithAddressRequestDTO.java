@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "ClientResponseDTO",description = "Information needed to create a Client")
-public class ClientWithAddressRequestDTO{
+public class ClientWithAddressRequestDTO implements Serializable {
 
     @NotNull(message="Client's first name is required")
     @ApiModelProperty(example = "Tomás", required = true, position = 1)

@@ -11,7 +11,6 @@ import com.ayi.academy.app.mappers.IAddressMapper;
 import com.ayi.academy.app.mappers.IClientDetailsMapper;
 import com.ayi.academy.app.mappers.IClientMapper;
 import com.ayi.academy.app.mappers.IInvoiceMapper;
-import com.ayi.academy.app.repositories.ClientDetailsRepository;
 import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.services.IClientService;
 import lombok.extern.slf4j.Slf4j;
@@ -64,10 +63,31 @@ public class ClientServiceImpl implements IClientService {
             ClientResponseDTO clientResponse = clientMapper.entityToDto(client);
             responseDTOList.add(clientResponse);
         });
-
-
         return responseDTOList;
     }
+    /**
+     * This method retrieves a list with all clients with their basic information.
+     * @throws ReadAccessException
+     */
+    @Override
+    public List<ClientBasicResponseDTO> getAllClientsWithBasicInfo() throws ReadAccessException {
+
+        List<Client> clientList = clientRepository.findAll();
+
+
+        if (clientList == null || clientList.size() == 0) {
+            throw new ReadAccessException("No clients registered.");
+        }
+
+        List<ClientBasicResponseDTO> responseDTOList = new ArrayList<>();
+
+        clientList.forEach(client -> {
+            ClientBasicResponseDTO clientResponse = clientMapper.entityBasicToDto(client);
+            responseDTOList.add(clientResponse);
+        });
+        return responseDTOList;
+    }
+
     /**
      * This method retrieves a client by its ID.
      * @param id

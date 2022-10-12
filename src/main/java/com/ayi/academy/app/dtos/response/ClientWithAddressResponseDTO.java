@@ -3,6 +3,8 @@ package com.ayi.academy.app.dtos.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -11,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "ClientResponseDTO",description = "Information needed to create a Client with an address")
-public class ClientWithAddressResponseDTO {
+public class ClientWithAddressResponseDTO implements Serializable {
 
     @ApiModelProperty(notes = "The unique id of a client",  position = 1)
     private Integer clientId;

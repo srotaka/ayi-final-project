@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @NoArgsConstructor
@@ -14,7 +15,7 @@ import java.util.List;
 @ApiModel(
         value = "InvoiceResponsePages",
         description = "Invoice list paginated")
-public class InvoiceResponsePages {
+public class InvoiceResponsePages implements Serializable {
 
     @ApiModelProperty(position = 1, notes = "List of invoices")
     private List<InvoiceResponseDTO> invoiceResponseList;

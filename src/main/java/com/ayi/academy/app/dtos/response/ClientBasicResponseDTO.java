@@ -5,15 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
+
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ClientResponseDTO",description = "Client with detail information")
-public class ClientWithDetailsResponseDTO implements Serializable {
-
+@ApiModel(value = "ClientResponseDTO",description = "Information needed to create a Client")
+public class ClientBasicResponseDTO implements Serializable {
     @ApiModelProperty(notes = "The unique id of a client",  position = 1)
     private Integer clientId;
 
@@ -31,11 +30,5 @@ public class ClientWithDetailsResponseDTO implements Serializable {
 
     @ApiModelProperty(notes = "Client's email address", position = 6)
     private String email;
-
-    @ApiModelProperty(notes = "Client type and points information", position = 7)
-    private ClientDetailsResponseDTO clientDetailsId;
-
-    @ApiModelProperty(notes = "Client address list information", position = 8)
-    private List<AddressResponseDTO> addressList;
 
 }
