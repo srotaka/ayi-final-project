@@ -1,5 +1,6 @@
 package com.ayi.academy.app.mappers.impl;
 import com.ayi.academy.app.dtos.request.InvoiceRequestDTO;
+import com.ayi.academy.app.dtos.request.InvoiceRequestWithoutClientDTO;
 import com.ayi.academy.app.dtos.response.InvoiceResponseDTO;
 import com.ayi.academy.app.dtos.response.InvoiceResponsePages;
 import com.ayi.academy.app.entities.Invoice;
@@ -32,6 +33,10 @@ public class InvoiceMapperImpl implements IInvoiceMapper {
         return  entity;
     }
 
+    @Override
+    public Invoice convertDtoToEntityWithoutClient(InvoiceRequestWithoutClientDTO request) {
+        return modelMapper.map(request, Invoice.class);
+    }
     @Override
     public InvoiceResponsePages pagedInvoiceList(List<Invoice> invoiceList) {
 

@@ -1,5 +1,7 @@
 package com.ayi.academy.app.controllers;
 
+import com.ayi.academy.app.dtos.request.AddressRequestWithoutClientDTO;
+import com.ayi.academy.app.dtos.request.InvoiceRequestWithoutClientDTO;
 import com.ayi.academy.app.dtos.response.AddressResponseDTO;
 import com.ayi.academy.app.dtos.response.AddressResponsePages;
 import com.ayi.academy.app.dtos.response.InvoiceResponseDTO;
@@ -27,6 +29,18 @@ import java.util.Map;
 public class InvoiceController {
     @Autowired
     private IInvoiceService invoiceService;
+
+    @PostMapping(value = "/addInvoice")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Save an Invoice with an existing client.", httpMethod = "POST", response = InvoiceResponseDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created. Invoice was successfully created.", response = InvoiceResponseDTO.class),
+            @ApiResponse(code = 400, message = "Bad request/Invalid field")
+    })
+    public ResponseEntity<InvoiceResponseDTO> addInvoice(@RequestBody InvoiceRequestWithoutClientDTO request, Integer clientId) {
+        InvoiceResponseDTO invoiceResponse = invoiceService.createInvoice(request, clientId);
+        return new ResponseEntity<>(invoiceResponse, HttpStatus.CREATED);
+    }
 
     @GetMapping(value = "/getInvoiceList")
     @ResponseStatus(HttpStatus.OK)

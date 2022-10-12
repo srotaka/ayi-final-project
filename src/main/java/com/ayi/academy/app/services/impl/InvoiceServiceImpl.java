@@ -1,11 +1,13 @@
 package com.ayi.academy.app.services.impl;
 
+import com.ayi.academy.app.dtos.request.InvoiceRequestWithoutClientDTO;
 import com.ayi.academy.app.dtos.response.InvoiceResponseDTO;
 import com.ayi.academy.app.dtos.response.InvoiceResponsePages;
-import com.ayi.academy.app.entities.Address;
+import com.ayi.academy.app.entities.Client;
 import com.ayi.academy.app.entities.Invoice;
 import com.ayi.academy.app.exceptions.ReadAccessException;
 import com.ayi.academy.app.mappers.IInvoiceMapper;
+import com.ayi.academy.app.repositories.ClientRepository;
 import com.ayi.academy.app.repositories.InvoiceRepository;
 import com.ayi.academy.app.services.IInvoiceService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -30,7 +29,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     @Autowired
     InvoiceRepository invoiceRepository;
-
+    @Autowired
+    ClientRepository clientRepository;
     @Autowired
     IInvoiceMapper invoiceMapper;
 
@@ -99,6 +99,14 @@ public class InvoiceServiceImpl implements IInvoiceService {
             throw new ReadAccessException("Error paginating address information");
         }
     }
+    @Override
+    public InvoiceResponseDTO createInvoice(InvoiceRequestWithoutClientDTO request, Integer clientId){
+        Invoice invoice = invoiceMapper.convertDtoToEntityWithoutClient(request);
+        Client client = clientRepository.findById(clientId).get();
 
+        invoice.setClientId(client);
+        invoiceRepository.save(invoice);
+        return invoiceMapper.entityToDto(invoice);
+    }
 
 }
