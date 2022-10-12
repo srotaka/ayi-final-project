@@ -27,14 +27,14 @@ public class AddressController {
     @Autowired
     private IAddressService addressService;
 
-    @PostMapping(value = "/addAddress ")
+    @PostMapping(value = "/addAddress")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Save an address with an existing client.", httpMethod = "POST", response = AddressResponseDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Created. Address was successfully created.", response = AddressResponseDTO.class),
             @ApiResponse(code = 400, message = "Bad request/Invalid field")
     })
-    public ResponseEntity<AddressResponseDTO> addPerson(@RequestBody AddressRequestWithoutClientDTO request, Integer clientId) {
+    public ResponseEntity<AddressResponseDTO> addAddress(@RequestBody AddressRequestWithoutClientDTO request, Integer clientId) {
         AddressResponseDTO addressResponse = addressService.createAddress(request, clientId);
         return new ResponseEntity<>(addressResponse, HttpStatus.CREATED);
     }

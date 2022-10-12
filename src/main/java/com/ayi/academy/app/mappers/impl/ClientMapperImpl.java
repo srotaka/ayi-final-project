@@ -76,20 +76,6 @@ public class ClientMapperImpl implements IClientMapper {
         entity.getAddressList().add(address);
         entity.getInvoiceList().add(invoice);
 
-
-       /* entity.setFirstName(requestDTO.getFirstName());
-        entity.setLastName(requestDTO.getLastName());
-        entity.setDni(requestDTO.getDni());
-        entity.setDocumentType(requestDTO.getDocumentType());
-        entity.setEmail(requestDTO.getEmail());
-        entity.setClientDetailsId(detailsMapper.dtoToEntity(requestDTO.getClientDetailsId()));
-        entity.setAddressList(requestDTO.getAddressList().stream()
-                .map(address -> modelMapper.map(requestDTO, Address.class))
-                .collect(Collectors.toList()));
-        entity.setInvoiceList(requestDTO.getInvoiceList().stream()
-                .map(invoice -> modelMapper.map(requestDTO, Invoice.class))
-                .collect(Collectors.toList()));
-*/
         return entity;
     }
     @Override
